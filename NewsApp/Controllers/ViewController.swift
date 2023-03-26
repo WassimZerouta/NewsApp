@@ -22,8 +22,10 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = colorPrimary
         createHeaderView()
         createFavoritesSection()
+
         // Do any additional setup after loading the view.
     }
     
@@ -67,23 +69,25 @@ class MainViewController: UIViewController {
         scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         scrollView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let v = UIView()
+        let v = UIStackView()
+        v.axis = .horizontal
         scrollView.addSubview(v)
         v.backgroundColor = UIColor.red
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+        v.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
         v.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
-        v.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        v.widthAnchor.constraint(equalToConstant: 700).isActive = true
+        v.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
+        v.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        v.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
         
         let a = UIView()
-        v.addSubview(a)
+        v.addArrangedSubview(a)
         a.backgroundColor = UIColor.yellow
-        a.translatesAutoresizingMaskIntoConstraints = false
-        a.leftAnchor.constraint(equalTo: v.leftAnchor, constant: 50).isActive = true
-        a.widthAnchor.constraint(equalToConstant: 500).isActive = true
-        a.heightAnchor.constraint(equalToConstant: 10).isActive = true
+        a.widthAnchor.constraint(equalToConstant: 600).isActive = true
+        a.heightAnchor.constraint(equalTo: v.heightAnchor).isActive = true
+        
     }
-
+    
 }
+
 
