@@ -14,7 +14,7 @@ class NewsAPIHelper {
     
     private var session = URLSession(configuration: .default)
     
-    let baseURL = "https://newsapi.org/v2/everything?sortBy=popularity&apiKey=10206633f4524d4a8636d39049e726a6"
+    let baseURL = "https://newsapi.org/v2/everything?sortBy=popularity&apiKey=10206633f4524d4a8636d39049e726a6&q="
     
     
     func getUrl(q: String) -> String? {
