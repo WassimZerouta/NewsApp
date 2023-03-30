@@ -11,6 +11,7 @@ class MainViewController: UIViewController {
     
     let headerView = UIView()
     let separation = UIView()
+    let secondSeparation = UIView()
     let scrollView = UIScrollView()
     
     let colorPrimaryDark = UIColor(red: 0.13, green: 0.37, blue: 0.38, alpha: 1.00)
@@ -25,6 +26,7 @@ class MainViewController: UIViewController {
         self.view.backgroundColor = colorPrimary
         createHeaderView()
         createFavoritesSection()
+        createSeparator()
 
         // Do any additional setup after loading the view.
     }
@@ -69,23 +71,60 @@ class MainViewController: UIViewController {
         scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         scrollView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let v = UIStackView()
-        v.axis = .horizontal
-        scrollView.addSubview(v)
-        v.backgroundColor = UIColor.red
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
-        v.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
-        v.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
-        v.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        v.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
+        let tabContainer = UIStackView()
+        tabContainer.axis = .horizontal
+        scrollView.addSubview(tabContainer)
+        tabContainer.translatesAutoresizingMaskIntoConstraints = false
+        tabContainer.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: 10).isActive = true
+        tabContainer.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -10).isActive = true
+        tabContainer.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+        tabContainer.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let a = UIView()
-        v.addArrangedSubview(a)
-        a.backgroundColor = UIColor.yellow
-        a.widthAnchor.constraint(equalToConstant: 600).isActive = true
-        a.heightAnchor.constraint(equalTo: v.heightAnchor).isActive = true
+        let allTab = UIButton()
+        tabContainer.addArrangedSubview(allTab)
+        tabContainer.setCustomSpacing(10, after: allTab)
+        allTab.layer.cornerRadius = 15
+        allTab.setTitle("ALL", for: .normal)
+        allTab.backgroundColor = colorGreen
+        allTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        allTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
+        let technologyTab = UIButton()
+        tabContainer.addArrangedSubview(technologyTab)
+        tabContainer.setCustomSpacing(10, after: technologyTab)
+        technologyTab.layer.cornerRadius = 15
+        technologyTab.setTitle("TECH", for: .normal)
+        technologyTab.backgroundColor = colorRed
+        technologyTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        technologyTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        let sportTab = UIButton()
+        tabContainer.addArrangedSubview(sportTab)
+        tabContainer.setCustomSpacing(10, after: sportTab)
+        sportTab.layer.cornerRadius = 15
+        sportTab.setTitle("SPORT", for: .normal)
+        sportTab.backgroundColor = colorOrange
+        sportTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        sportTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        let cinemaTab = UIButton()
+        tabContainer.addArrangedSubview(cinemaTab)
+        tabContainer.setCustomSpacing(10, after: cinemaTab)
+        cinemaTab.layer.cornerRadius = 15
+        cinemaTab.setTitle("CINEMA", for: .normal)
+        cinemaTab.backgroundColor = UIColor.magenta
+        cinemaTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        cinemaTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    }
+    
+    func createSeparator() {
+        self.view.addSubview(secondSeparation)
+        secondSeparation.translatesAutoresizingMaskIntoConstraints = false
+        secondSeparation.backgroundColor = colorPrimaryDark
+        secondSeparation.topAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        secondSeparation.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        secondSeparation.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        secondSeparation.heightAnchor.constraint(equalToConstant: 5).isActive = true
     }
     
 }
