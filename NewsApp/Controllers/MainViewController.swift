@@ -16,6 +16,8 @@ class MainViewController: UIViewController {
     let scrollView = UIScrollView()
     let tableView = UITableView()
     
+    var tabArray = [UIButton]()
+        
     var articles: [Article]?
     
     let colorPrimaryDark = UIColor(red: 0.13, green: 0.37, blue: 0.38, alpha: 1.00)
@@ -29,7 +31,7 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchArticles()
+        fetchArticles("Soccer")
         self.view.backgroundColor = colorPrimary
         createHeaderView()
         createFavoritesSection()
@@ -86,47 +88,39 @@ class MainViewController: UIViewController {
         tabContainer.rightAnchor.constraint(equalTo: scrollView.rightAnchor, constant: -10).isActive = true
         tabContainer.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
         tabContainer.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
-        let allTab = UIButton()
-        tabContainer.addArrangedSubview(allTab)
-        tabContainer.setCustomSpacing(10, after: allTab)
-        allTab.layer.cornerRadius = 15
-        allTab.setTitle("ALL", for: .normal)
-        allTab.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
-        allTab.backgroundColor = UIColor.blue
-        allTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        allTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        let technologyTab = UIButton()
-        tabContainer.addArrangedSubview(technologyTab)
-        tabContainer.setCustomSpacing(10, after: technologyTab)
-        technologyTab.layer.cornerRadius = 15
-        technologyTab.setTitle("TECH", for: .normal)
-        technologyTab.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
-        technologyTab.backgroundColor = colorRed
-        technologyTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        technologyTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        let sportTab = UIButton()
-        tabContainer.addArrangedSubview(sportTab)
-        tabContainer.setCustomSpacing(10, after: sportTab)
-        sportTab.layer.cornerRadius = 15
-        sportTab.setTitle("SPORT", for: .normal)
-        sportTab.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
-        sportTab.backgroundColor = colorOrange
-        sportTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        sportTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        let cinemaTab = UIButton()
-        tabContainer.addArrangedSubview(cinemaTab)
-        tabContainer.setCustomSpacing(10, after: cinemaTab)
-        cinemaTab.layer.cornerRadius = 15
-        cinemaTab.setTitle("CINEMA", for: .normal)
-        cinemaTab.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
-        cinemaTab.backgroundColor = UIColor.magenta
-        cinemaTab.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        cinemaTab.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        createTab("ALL", container: tabContainer)
+        createTab("TECH", container: tabContainer)
+        createTab("SPORT", container: tabContainer)
+        createTab("CINEMA", container: tabContainer)
     }
+    
+    func createTab(_ title: String, container: UIStackView) {
+        let button = UIButton()
+        button.layer.cornerRadius = 15
+        button.setTitle(title, for: .normal)
+        container.addArrangedSubview(button)
+        container.setCustomSpacing(10, after: button)
+        button.backgroundColor = UIColor(named: "ColorSecondary")
+        button.isUserInteractionEnabled = true
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20.0, weight: .bold)
+        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        tabArray.append(button)
+        button.addTarget(self, action: #selector(tapTab), for: .touchUpInside)
+    }
+    
+    
+    @objc func tapTab(sender: UIButton!) {
+        tabArray.forEach { tab in
+            tab.backgroundColor = colorPrimaryDark
+        }
+        sender.backgroundColor = UIColor.systemOrange
+        
+        fetchArticles((sender.titleLabel?.text)!)
+        tableView.reloadData()
+    }
+    
+    
     
     func createSeparator() {
         self.view.addSubview(secondSeparation)
@@ -148,9 +142,9 @@ class MainViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
-    func fetchArticles() {
+    func fetchArticles(_ q: String) {
         
-        NewsAPIHelper.shared.performRequest(q:"mahrez" ) { _ , Articles in
+        NewsAPIHelper.shared.performRequest( q: q ) { _ , Articles in
             DispatchQueue.main.async {
                 self.articles = Articles!
                 self.tableView.reloadData()

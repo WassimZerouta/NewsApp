@@ -31,16 +31,23 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
+    let bookmark: UIImageView = {
+        var image = UIImageView()
+        image.image = UIImage(systemName: "bookmark.fill")
+        image.tintColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
+        return image
+    }()
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         contentView.addSubview(image)
+        image.addSubview(bookmark)
         image.addSubview(title)
         image.addSubview(contentDescription)
         
         image.translatesAutoresizingMaskIntoConstraints = false
+        bookmark.translatesAutoresizingMaskIntoConstraints = false
         title.translatesAutoresizingMaskIntoConstraints = false
         contentDescription.translatesAutoresizingMaskIntoConstraints = false
         
@@ -48,6 +55,12 @@ class NewsTableViewCell: UITableViewCell {
         image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         image.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         image.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        
+        bookmark.topAnchor.constraint(equalTo: image.topAnchor, constant: 20).isActive = true
+        bookmark.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
+        bookmark.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        bookmark.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
         
         title.bottomAnchor.constraint(equalTo: contentDescription.topAnchor, constant: -20).isActive = true
         title.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
@@ -73,6 +86,12 @@ class NewsTableViewCell: UITableViewCell {
             gradient.frame = CGRect(x: 0, y: height - sHeight, width: width, height: sHeight)
             image.layer.insertSublayer(gradient, at: 0)
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by:  UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+
     }
 
     
