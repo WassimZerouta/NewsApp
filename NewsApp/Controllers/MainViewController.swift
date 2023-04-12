@@ -187,6 +187,17 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         return 300
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let newsUrl = articles![indexPath.row].url
+        let title = articles![indexPath.row].source?.name
+        if let url = newsUrl {
+            let vc = WebNiewsViewController(url: url, title: title ?? "")
+            let navVc = UINavigationController(rootViewController: vc)
+            present(navVc, animated: true)
+        }
+    
+        
+    }
     
 }
 
