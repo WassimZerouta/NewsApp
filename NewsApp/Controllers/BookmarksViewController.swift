@@ -6,24 +6,39 @@
 //
 
 import UIKit
+import Alamofire
 
 class BookmarksViewController: UIViewController {
+    
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        return tableView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addSubview(tableView)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.frame = self.view.frame
+        view.backgroundColor = .systemGroupedBackground
+    }
 
-        // Do any additional setup after loading the view.
+}
+
+extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
     }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+            return cell
+        }
+        
+        else { let defaultCell = UITableViewCell(); return defaultCell }
     }
-    */
-
+    
 }

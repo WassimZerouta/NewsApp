@@ -9,7 +9,9 @@ import UIKit
 import Alamofire
 
 class NewsTableViewCell: UITableViewCell {
-
+    
+    var article = CD_Article(context: CoreDataStack.sharedInstance.viewContext)
+    
     var image = UIImageView()
     var title: UILabel = {
         var label = UILabel()
@@ -31,24 +33,19 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    let bookmark: UIImageView = {
-        var image = UIImageView()
-        image.image = UIImage(systemName: "bookmark.fill")
-        image.tintColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
-        return image
-    }()
+    var url = String()
+    var urlToImage = String()
+
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         
         contentView.addSubview(image)
-        image.addSubview(bookmark)
         image.addSubview(title)
         image.addSubview(contentDescription)
         
         image.translatesAutoresizingMaskIntoConstraints = false
-        bookmark.translatesAutoresizingMaskIntoConstraints = false
         title.translatesAutoresizingMaskIntoConstraints = false
         contentDescription.translatesAutoresizingMaskIntoConstraints = false
         
@@ -56,13 +53,7 @@ class NewsTableViewCell: UITableViewCell {
         image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         image.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         image.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        
-        bookmark.topAnchor.constraint(equalTo: image.topAnchor, constant: 20).isActive = true
-        bookmark.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
-        bookmark.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        bookmark.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
-        
+ 
         title.bottomAnchor.constraint(equalTo: contentDescription.topAnchor, constant: -20).isActive = true
         title.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
         title.leftAnchor.constraint(equalTo: image.leftAnchor, constant: 10).isActive = true

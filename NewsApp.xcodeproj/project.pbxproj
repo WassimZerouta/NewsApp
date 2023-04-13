@@ -15,6 +15,9 @@
 		575DEB5429E6BD4800E425E2 /* BookmarksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5329E6BD4800E425E2 /* BookmarksViewController.swift */; };
 		575DEB5629E6C0DF00E425E2 /* WebNiewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5529E6C0DF00E425E2 /* WebNiewsViewController.swift */; };
 		575DEB5A29E7660300E425E2 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5829E7660300E425E2 /* CoreDataModel.xcdatamodeld */; };
+		575DEB5C29E8117200E425E2 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5B29E8117200E425E2 /* CoreDataStack.swift */; };
+		575DEB5E29E8156600E425E2 /* CD_Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5D29E8156600E425E2 /* CD_Article.swift */; };
+		575DEB6029E8237900E425E2 /* CD_ArticleRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575DEB5F29E8237900E425E2 /* CD_ArticleRepository.swift */; };
 		577BE33629D5A819001DA88A /* NewsAPIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577BE33529D5A819001DA88A /* NewsAPIHelper.swift */; };
 		577BE33929D5A876001DA88A /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 577BE33829D5A876001DA88A /* Alamofire */; };
 		577BE33B29D5A8A7001DA88A /* NewsAPIResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577BE33A29D5A8A7001DA88A /* NewsAPIResult.swift */; };
@@ -45,6 +48,9 @@
 		575DEB5329E6BD4800E425E2 /* BookmarksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksViewController.swift; sourceTree = "<group>"; };
 		575DEB5529E6C0DF00E425E2 /* WebNiewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebNiewsViewController.swift; sourceTree = "<group>"; };
 		575DEB5929E7660300E425E2 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
+		575DEB5B29E8117200E425E2 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		575DEB5D29E8156600E425E2 /* CD_Article.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CD_Article.swift; sourceTree = "<group>"; };
+		575DEB5F29E8237900E425E2 /* CD_ArticleRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CD_ArticleRepository.swift; sourceTree = "<group>"; };
 		577BE33529D5A819001DA88A /* NewsAPIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPIHelper.swift; sourceTree = "<group>"; };
 		577BE33A29D5A8A7001DA88A /* NewsAPIResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPIResult.swift; sourceTree = "<group>"; };
 		577BE33C29D5B7D8001DA88A /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
@@ -91,6 +97,9 @@
 			isa = PBXGroup;
 			children = (
 				575DEB5829E7660300E425E2 /* CoreDataModel.xcdatamodeld */,
+				575DEB5B29E8117200E425E2 /* CoreDataStack.swift */,
+				575DEB5D29E8156600E425E2 /* CD_Article.swift */,
+				575DEB5F29E8237900E425E2 /* CD_ArticleRepository.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -292,8 +301,11 @@
 				57CACF1229CF8684008D17E3 /* MainViewController.swift in Sources */,
 				575DEB5A29E7660300E425E2 /* CoreDataModel.xcdatamodeld in Sources */,
 				577BE33D29D5B7D8001DA88A /* NewsTableViewCell.swift in Sources */,
+				575DEB5C29E8117200E425E2 /* CoreDataStack.swift in Sources */,
 				577BE33629D5A819001DA88A /* NewsAPIHelper.swift in Sources */,
+				575DEB6029E8237900E425E2 /* CD_ArticleRepository.swift in Sources */,
 				57CACF0E29CF8684008D17E3 /* AppDelegate.swift in Sources */,
+				575DEB5E29E8156600E425E2 /* CD_Article.swift in Sources */,
 				57CACF1029CF8684008D17E3 /* SceneDelegate.swift in Sources */,
 				575DEB5629E6C0DF00E425E2 /* WebNiewsViewController.swift in Sources */,
 			);

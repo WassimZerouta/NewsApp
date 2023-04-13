@@ -40,6 +40,11 @@ class MainViewController: UIViewController {
         setupTableView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     // Definition of the UI
     
     private func createHeaderView() {
@@ -166,8 +171,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
-            
-            AF.request(  articles![indexPath.row].urlToImage! ,method: .get).response{ response in
+            if let urlToImage = articles![indexPath.row].urlToImage {
+            AF.request(  urlToImage ,method: .get).response{ response in
                 switch response.result {
                 case .success(let responseData):
                     cell.image.image = UIImage(data: responseData!)!
@@ -175,8 +180,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
                     print(error)
                 }
             }
-            cell.title.text = articles![indexPath.row].title
-            cell.contentDescription.text = articles![indexPath.row].description
+        }
+            
+            if let title = articles![indexPath.row].title { cell.title.text = title }
+            if let description = articles![indexPath.row].description { cell.contentDescription.text = description}
+            if let url = articles![indexPath.row].url { cell.url = url }
+            if let urlToImage = articles![indexPath.row].urlToImage { cell.urlToImage = urlToImage }
             
             return cell
         }
@@ -188,15 +197,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let newsUrl = articles![indexPath.row].url
-        let title = articles![indexPath.row].source?.name
-        if let url = newsUrl {
-            let vc = WebNiewsViewController(url: url, title: title ?? "")
-            let navVc = UINavigationController(rootViewController: vc)
-            present(navVc, animated: true)
-        }
-    
-        
+        guard let title = articles![indexPath.row].title else {return}
+        guard let description = articles![indexPath.row].description else {return}
+        guard let url = articles![indexPath.row].url else {return}
+        guard let urlToImage = articles![indexPath.row].urlToImage else {return}
+        let vc = WebNiewsViewController(url: url, titles: title, desc: description, urlToImage: urlToImage)
+        let navVc = UINavigationController(rootViewController: vc)
+        present(navVc, animated: true)
     }
     
 }

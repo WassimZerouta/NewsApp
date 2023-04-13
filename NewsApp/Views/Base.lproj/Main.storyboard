@@ -65,18 +65,19 @@
         <!--Bookmark-->
         <scene sceneID="4Dq-3X-qdL">
             <objects>
-                <viewController id="PIm-PL-tmR" sceneMemberID="viewController">
+                <viewController autoresizesArchivedViewToFullSize="NO" keyboardType="off" id="PIm-PL-tmR" customClass="BookmarksViewController" customModule="NewsApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k0R-VM-A35">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="no6-r7-bOU"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <tabBarItem key="tabBarItem" title="Bookmark" image="bookmark.fill" catalog="system" id="Zzy-HU-zd0"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NXv-a9-bo2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="48" y="705"/>
+            <point key="canvasLocation" x="48" y="806"/>
         </scene>
         <!--Search-->
         <scene sceneID="p6k-6w-dMn">
