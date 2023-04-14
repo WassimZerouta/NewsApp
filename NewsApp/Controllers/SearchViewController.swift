@@ -9,20 +9,20 @@ import UIKit
 
 class SearchViewController: UIViewController {
     
+    var a = [String]()
+    
     let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
         searchBar.isHidden = false
-        searchBar.tintColor = UIColor(named: "ColorSecondary")
         // searchBar.borderColor = Colors.colorPrimary()
         searchBar.placeholder = "chercher.."
-        searchBar.barTintColor = UIColor(named: "ColorSecondary")
         return searchBar
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
         createSearchBar()
-        self.view.backgroundColor = UIColor(named: "ColorPrimary")
 
         // Do any additional setup after loading the view.
     }
@@ -36,15 +36,13 @@ class SearchViewController: UIViewController {
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
+}
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        a.append(searchBar.text!)
+        print(a)
+        searchBar.text = ""
+        searchBar.endEditing(false)
     }
-    */
-
 }

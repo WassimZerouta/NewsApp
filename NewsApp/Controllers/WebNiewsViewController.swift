@@ -50,6 +50,7 @@ class WebNiewsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
+        webView.navigationDelegate = self
         createWebView()
         createNavItemButtons()
         createbookmarkButton()
@@ -148,11 +149,27 @@ class WebNiewsViewController: UIViewController {
     func loadNewsUrl(_ stringUrl: String) {
         let newsUrl = URL(string: stringUrl)
         if let url = newsUrl {
-            webView.load(URLRequest(url: url))
+            DispatchQueue.main.async {
+                self.webView.load(URLRequest(url: url))
+            }
         }
         else {
             print("CONTENU INNACCESSIBLE")
         }
     }
 
+}
+
+extension WebNiewsViewController: WKNavigationDelegate {
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if let host = navigationAction.request.url?.host {
+            if host.contains(".com") {
+                decisionHandler(.allow)
+                return
+            }
+        }
+
+        decisionHandler(.cancel)
+    }
 }
