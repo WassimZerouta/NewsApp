@@ -19,8 +19,9 @@ class BookmarksViewController: UIViewController {
     
     let titleLabel: UILabel = {
         var label = UILabel()
-        label.text = "BOOKMARKS:"
-        label.font = UIFont.boldSystemFont(ofSize: 25)
+        label.text = "Your Bookmarks !"
+        label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
+        label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         return label
     }()
 
@@ -55,7 +56,7 @@ class BookmarksViewController: UIViewController {
     func createTitle() {
         self.view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
         titleLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true

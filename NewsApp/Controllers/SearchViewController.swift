@@ -6,25 +6,64 @@
 //
 
 import UIKit
+import Lottie
 
 class SearchViewController: UIViewController {
     
-    var a = [String]()
+    var searchArray = [String]()
     
     let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
         searchBar.isHidden = false
         // searchBar.borderColor = Colors.colorPrimary()
-        searchBar.placeholder = "chercher.."
+        searchBar.placeholder = "Search.."
         return searchBar
     }()
+    
+    let animation: LottieAnimationView = {
+        var animation = LottieAnimationView()
+        animation = .init(name: "news")
+        animation.contentMode = .scaleToFill
+        animation.loopMode = .playOnce
+        animation.animationSpeed = 1.5
+        animation.alpha = 0.3
+        return animation
+    }()
+    
+    let addFavoriteSubjectButton : UIButton = {
+       let button = UIButton()
+        button.setImage(UIImage(systemName: "plus.app"), for: .normal)
+        button.tintColor = .gray
+        return button
+    }()
+    
+    let favoriteSubjectLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Your Favorites Subjects !"
+        label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
+        label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
+        return label
+    }()
+    
+    var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        var collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        return collection
+    }()
 
+    var sections = ["FOOT", "BASKET", "VOLLEY", "MAHREZ"]
+    
+    let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        setupCollectionView()
         createSearchBar()
-
-        // Do any additional setup after loading the view.
+        createFavoriteSubjectLabel()
+        createAddFavoriteSubjectButton()
+        createFavoritesSection()
+        createNewsAnimation()
     }
     
     func createSearchBar() {
@@ -36,13 +75,100 @@ class SearchViewController: UIViewController {
         searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
+    
+    func createFavoriteSubjectLabel() {
+        self.view.addSubview(favoriteSubjectLabel)
+        favoriteSubjectLabel.translatesAutoresizingMaskIntoConstraints = false
+        favoriteSubjectLabel.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20).isActive = true
+        favoriteSubjectLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        favoriteSubjectLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 300).isActive = true
+        favoriteSubjectLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+    }
+    
+    func createAddFavoriteSubjectButton() {
+        self.view.addSubview(addFavoriteSubjectButton)
+        addFavoriteSubjectButton.translatesAutoresizingMaskIntoConstraints = false
+        addFavoriteSubjectButton.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 20).isActive = true
+        addFavoriteSubjectButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        addFavoriteSubjectButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        addFavoriteSubjectButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        addFavoriteSubjectButton.addTarget(self, action: #selector(addFavoriteSubjectButtonPressed), for: .touchUpInside)
+        
+    }
+    
+    private func createFavoritesSection() {
+        self.view.addSubview(collectionView)
+        collectionView.isUserInteractionEnabled = true
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.topAnchor.constraint(equalTo: favoriteSubjectLabel.bottomAnchor, constant: 20).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+    }
+    
+    func createNewsAnimation() {
+        self.view.addSubview(animation)
+        animation.isUserInteractionEnabled = true
+        animation.translatesAutoresizingMaskIntoConstraints = false
+        animation.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        animation.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        animation.widthAnchor.constraint(equalToConstant: 300).isActive = true
+        animation.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        animation.play()
+        
+    }
+    
+    func setupCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCollectionViewCell")
+    }
+    
+    @objc func addFavoriteSubjectButtonPressed() {
+        let alertController = UIAlertController(title: "Add new favorite subject !", message: nil, preferredStyle: .alert)
+                let confirmAction = UIAlertAction(title: "Add", style: .default) { (_) in
+                    if let txtField = alertController.textFields?.first, let text = txtField.text {
+                        self.sections.append(text)
+                        self.collectionView.reloadData()
+                    }
+                }
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
+                alertController.addTextField { (textField) in
+                    textField.placeholder = "Sport, music.."
+                }
+                alertController.addAction(confirmAction)
+                alertController.addAction(cancelAction)
+                self.present(alertController, animated: true, completion: nil)
+        
+    }
 }
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        a.append(searchBar.text!)
-        print(a)
+        searchArray.append(searchBar.text!)
+        print(searchArray)
         searchBar.text = ""
         searchBar.endEditing(false)
     }
+}
+
+extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        sections.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
+        cell.titleLabel.text = sections[indexPath.row]
+        cell.contentView.layer.cornerRadius = 7
+        cell.contentView.backgroundColor = colorPrimary
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width/3.5 - 5, height: 50)
+    }
+    
+    
 }

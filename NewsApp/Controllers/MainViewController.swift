@@ -36,7 +36,7 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchArticles("Netflix")
+        fetchArticles(sections[0])
         createHeaderView()
         createFavoritesSection()
         createTableView()
@@ -120,19 +120,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
-            
-            
             if let urlToImage = articles![indexPath.row].urlToImage {
             AF.request(  urlToImage ,method: .get).response{ response in
                     switch response.result {
                     case .success(let responseData):
-                        cell.image.image = UIImage(data: responseData!)!
+                        DispatchQueue.main.async {
+                            cell.image.image = UIImage(data: responseData!)!
+                        }
                     case .failure(let error):
                         print(error)
                     }
             }
         }
-            
             if let title = articles![indexPath.row].title { cell.title.text = title }
             if let description = articles![indexPath.row].description { cell.contentDescription.text = description}
             

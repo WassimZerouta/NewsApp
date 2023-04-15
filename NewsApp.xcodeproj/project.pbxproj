@@ -29,6 +29,8 @@
 		57CACF1529CF8684008D17E3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57CACF1329CF8684008D17E3 /* Main.storyboard */; };
 		57CACF1A29CF868A008D17E3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 57CACF1929CF868A008D17E3 /* Assets.xcassets */; };
 		57CACF1D29CF868A008D17E3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 57CACF1B29CF868A008D17E3 /* LaunchScreen.storyboard */; };
+		57E5E33529EAC037008FBA45 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 57E5E33429EAC037008FBA45 /* Lottie */; };
+		57E5E33729EACDB3008FBA45 /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = 57E5E33629EACDB3008FBA45 /* news.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,7 @@
 		57CACF1929CF868A008D17E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		57CACF1C29CF868A008D17E3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		57CACF1E29CF868A008D17E3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57E5E33629EACDB3008FBA45 /* news.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = news.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 				575DEB4E29E6141A00E425E2 /* FirebaseAnalytics in Frameworks */,
 				575DEB5029E6141A00E425E2 /* FirebaseAuth in Frameworks */,
 				577BE33929D5A876001DA88A /* Alamofire in Frameworks */,
+				57E5E33529EAC037008FBA45 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +147,7 @@
 				57CACF0D29CF8684008D17E3 /* AppDelegate.swift */,
 				57CACF0F29CF8684008D17E3 /* SceneDelegate.swift */,
 				57CACF1929CF868A008D17E3 /* Assets.xcassets */,
+				57E5E33629EACDB3008FBA45 /* news.json */,
 				57CACF1E29CF868A008D17E3 /* Info.plist */,
 				575DEB4A29E6110B00E425E2 /* GoogleService-Info.plist */,
 			);
@@ -217,6 +222,7 @@
 				577BE33829D5A876001DA88A /* Alamofire */,
 				575DEB4D29E6141A00E425E2 /* FirebaseAnalytics */,
 				575DEB4F29E6141A00E425E2 /* FirebaseAuth */,
+				57E5E33429EAC037008FBA45 /* Lottie */,
 			);
 			productName = NewsApp;
 			productReference = 57CACF0A29CF8684008D17E3 /* NewsApp.app */;
@@ -253,6 +259,7 @@
 			packageReferences = (
 				577BE33729D5A876001DA88A /* XCRemoteSwiftPackageReference "Alamofire" */,
 				575DEB4C29E6141A00E425E2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				57E5E33329EAC037008FBA45 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 57CACF0B29CF8684008D17E3 /* Products */;
 			projectDirPath = "";
@@ -277,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57CACF1D29CF868A008D17E3 /* LaunchScreen.storyboard in Resources */,
+				57E5E33729EACDB3008FBA45 /* news.json in Resources */,
 				575DEB4B29E6110B00E425E2 /* GoogleService-Info.plist in Resources */,
 				57CACF1A29CF868A008D17E3 /* Assets.xcassets in Resources */,
 				57CACF1529CF8684008D17E3 /* Main.storyboard in Resources */,
@@ -596,6 +604,14 @@
 				kind = branch;
 			};
 		};
+		57E5E33329EAC037008FBA45 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -613,6 +629,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 577BE33729D5A876001DA88A /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		57E5E33429EAC037008FBA45 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 57E5E33329EAC037008FBA45 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 

@@ -28,4 +28,3 @@ struct Source: Decodable {
     
     var name: String?
 }
-
