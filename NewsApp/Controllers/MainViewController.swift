@@ -10,11 +10,15 @@ import Alamofire
 
 class MainViewController: UIViewController {
     
+    var subject: String?
+    
+    
     let headerView = UIView()
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         var collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collection.backgroundColor = .systemGroupedBackground
         return collection
     }()
     let tableView = UITableView()
@@ -22,9 +26,8 @@ class MainViewController: UIViewController {
     var tabArray = [UIButton]()
         
     var articles: [Article]?
-    
-    var sections = ["FOOT", "BASKET", "VOLLEY", "MAHREZ"]
-    
+    var cd_favoriteSubject = [CD_FavoriteSubject]()
+
     let colorPrimaryDark = UIColor(red: 0.13, green: 0.37, blue: 0.38, alpha: 1.00)
     let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
     let colorGreen = UIColor(red: 0.02, green: 1.00, blue: 0.54, alpha: 1.00)
@@ -36,7 +39,8 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchArticles(sections[0])
+        if let search = subject { fetchArticles(search)} else { fetchArticles("Google")}
+        view.backgroundColor = .systemGroupedBackground
         createHeaderView()
         createFavoritesSection()
         createTableView()
@@ -46,7 +50,15 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        CD_FavoriteSubjectRepository().getFavoriteSubject { CD_FavoriteSubject in
+            DispatchQueue.main.async {
+                self.cd_favoriteSubject = CD_FavoriteSubject
+                self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
+                    cd_favoriteSubject.name == nil
+                }
+                self.collectionView.reloadData()
+            }
+        }
     }
     
     func fetchArticles(_ q: String) {
@@ -72,7 +84,7 @@ class MainViewController: UIViewController {
         headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.text = "NEWSLY"
+        title.text = "NEWS APP"
         title.font = UIFont(name:"Futura-Bold", size: 30.0)
         title.textColor = colorPrimaryDark
         title.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
@@ -158,15 +170,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        sections.count
+        cd_favoriteSubject.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
-        cell.titleLabel.text = sections[indexPath.row]
+        cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
         cell.contentView.layer.cornerRadius = 7
         cell.contentView.backgroundColor = colorPrimary
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        fetchArticles(cd_favoriteSubject[indexPath.row].name!)
+        tableView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -7,4 +7,8 @@
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="urlToImage" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="CD_FavoriteSubject" representedClassName=".CD_FavoriteSubject" syncable="YES" codeGenerationType="category">
+        <attribute name="isAdded" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
 </model>

@@ -55,7 +55,15 @@ class WebNiewsViewController: UIViewController {
         createNavItemButtons()
         createbookmarkButton()
         loadNewsUrl(stringUrl)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshFavorite()
         
+    }
+    
+    func refreshFavorite() {
         CD_ArticleRepository().getArticles { CD_Articles in
             DispatchQueue.main.async { [self] in
                 self.cd_articles = CD_Articles
@@ -66,7 +74,6 @@ class WebNiewsViewController: UIViewController {
             }
         }
         
-
     }
     
     func checkIsAdded(CD_Articles: [CD_Article], articleTitle: String) -> UIColor {
@@ -75,9 +82,11 @@ class WebNiewsViewController: UIViewController {
             if titleArray.contains(where: { title in
                 title == articleTitle
             }) {
+                self.article.isAdded = true
                 color = UIColor.systemGreen
             }
             else {
+                self.article.isAdded = false
                color = UIColor.red
             }
         return color
@@ -111,11 +120,16 @@ class WebNiewsViewController: UIViewController {
     }
     
     @objc func bookmarkHandler() {
-        CD_ArticleRepository().getArticles { array in
-            print(array)
+        
+        for article in cd_articles! {
+            if let title = article.title {
+                if title == titles {
+                   removeArticle(article: article)
+                }
+            }
         }
         if article.isAdded == true {
-            removeArticle()
+            removeArticle(article: self.article)
         } else {
             saveArticle(title: titles, desc: desc, url: stringUrl, urlToImage: urlToImage, isAdded: true)
         }
@@ -130,7 +144,7 @@ class WebNiewsViewController: UIViewController {
     }
     
     
-    func removeArticle() {
+    func removeArticle(article: CD_Article) {
         CD_ArticleRepository().removeArticles(article: article) {
             bookmarkButton.tintColor = .red
         }
@@ -154,7 +168,7 @@ class WebNiewsViewController: UIViewController {
             }
         }
         else {
-            print("CONTENU INNACCESSIBLE")
+            print("ERR: INNACCESSIBLE CONTENT")
         }
     }
 
