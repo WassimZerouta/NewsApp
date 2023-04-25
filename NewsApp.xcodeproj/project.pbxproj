@@ -33,6 +33,7 @@
 		57E5E33729EACDB3008FBA45 /* news.json in Resources */ = {isa = PBXBuildFile; fileRef = 57E5E33629EACDB3008FBA45 /* news.json */; };
 		57E5E33929EB3C5E008FBA45 /* CD_FavoriteSubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E5E33829EB3C5E008FBA45 /* CD_FavoriteSubject.swift */; };
 		57E5E33B29EB3CB9008FBA45 /* CD_FavoriteSubjectRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E5E33A29EB3CB9008FBA45 /* CD_FavoriteSubjectRepository.swift */; };
+		57ED519529F16E7D006EF9E0 /* DrowableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57ED519429F16E7D006EF9E0 /* DrowableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		57E5E33629EACDB3008FBA45 /* news.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = news.json; sourceTree = "<group>"; };
 		57E5E33829EB3C5E008FBA45 /* CD_FavoriteSubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CD_FavoriteSubject.swift; sourceTree = "<group>"; };
 		57E5E33A29EB3CB9008FBA45 /* CD_FavoriteSubjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CD_FavoriteSubjectRepository.swift; sourceTree = "<group>"; };
+		57ED519429F16E7D006EF9E0 /* DrowableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrowableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				571F864E29DF0A4F00F06DE8 /* SearchViewController.swift */,
 				575DEB5329E6BD4800E425E2 /* BookmarksViewController.swift */,
 				575DEB5529E6C0DF00E425E2 /* WebNiewsViewController.swift */,
+				57ED519429F16E7D006EF9E0 /* DrowableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				575DEB6029E8237900E425E2 /* CD_ArticleRepository.swift in Sources */,
 				57CACF0E29CF8684008D17E3 /* AppDelegate.swift in Sources */,
 				575DEB5E29E8156600E425E2 /* CD_Article.swift in Sources */,
+				57ED519529F16E7D006EF9E0 /* DrowableViewController.swift in Sources */,
 				57CACF1029CF8684008D17E3 /* SceneDelegate.swift in Sources */,
 				575DEB5629E6C0DF00E425E2 /* WebNiewsViewController.swift in Sources */,
 				57E5E33B29EB3CB9008FBA45 /* CD_FavoriteSubjectRepository.swift in Sources */,

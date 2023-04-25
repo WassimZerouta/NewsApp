@@ -46,6 +46,13 @@ class WebNiewsViewController: UIViewController {
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
+    
+    let drawableButton: UIButton = {
+        var button = UIButton()
+        button.setImage(UIImage(systemName: "pencil"), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +61,7 @@ class WebNiewsViewController: UIViewController {
         createWebView()
         createNavItemButtons()
         createbookmarkButton()
+        createDrawableButton()
         loadNewsUrl(stringUrl)
     }
     
@@ -112,6 +120,17 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    func createDrawableButton() {
+        self.view.addSubview(drawableButton)
+        drawableButton.translatesAutoresizingMaskIntoConstraints = false
+        drawableButton.topAnchor.constraint(equalTo: webView.bottomAnchor).isActive = true
+        drawableButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -100).isActive = true
+        drawableButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        drawableButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        drawableButton.addTarget(self, action: #selector(drowableHandler), for: .touchUpInside)
+        
+    }
+    
     func createNavItemButtons() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward"), style: .done, target: self, action: #selector(backButton))
         
@@ -134,6 +153,13 @@ class WebNiewsViewController: UIViewController {
             saveArticle(title: titles, desc: desc, url: stringUrl, urlToImage: urlToImage, isAdded: true)
         }
         
+    }
+    
+    @objc func drowableHandler() {
+        let image = self.webView.takeScreenShot()
+        let vc = DrowableViewController(backgroundImage: image)
+        let navVc = UINavigationController(rootViewController: vc)
+        present(navVc, animated: false)
     }
     
     func saveArticle(title: String, desc: String, url: String, urlToImage: String, isAdded: Bool) {
@@ -185,5 +211,23 @@ extension WebNiewsViewController: WKNavigationDelegate {
         }
 
         decisionHandler(.cancel)
+    }
+}
+
+extension UIView {
+    
+    // Add a screenshot feature to the UIView class.
+    func takeScreenShot() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+        drawHierarchy(in: self.bounds, afterScreenUpdates: true)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        if image != nil {
+            return image!
+        }
+        
+        return UIImage()
     }
 }

@@ -162,8 +162,6 @@ extension SearchViewController: UISearchBarDelegate {
         vc.subject = searchBar.text
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
-       
-        
     }
 }
 

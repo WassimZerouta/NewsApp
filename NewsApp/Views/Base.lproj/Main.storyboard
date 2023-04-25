@@ -39,6 +39,21 @@
             </objects>
             <point key="canvasLocation" x="1931" y="-216"/>
         </scene>
+        <!--Drowable View Controller-->
+        <scene sceneID="MMe-eH-PPb">
+            <objects>
+                <viewController id="zRt-qA-x6t" customClass="DrowableViewController" customModule="NewsApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Yqz-7k-moL">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="2eq-rJ-ilT"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="fmO-Cb-UP5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2883" y="-216"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="z9A-5Z-D3U">
             <objects>
