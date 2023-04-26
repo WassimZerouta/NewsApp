@@ -19,6 +19,7 @@ class MainViewController: UIViewController {
         layout.scrollDirection = .horizontal
         var collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collection.backgroundColor = .systemGroupedBackground
+        collection.showsHorizontalScrollIndicator = false
         return collection
     }()
     let tableView = UITableView()
@@ -97,7 +98,7 @@ class MainViewController: UIViewController {
         collectionView.isUserInteractionEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
@@ -188,6 +189,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width/4 - 3, height: 40)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20)
     }
     
     
