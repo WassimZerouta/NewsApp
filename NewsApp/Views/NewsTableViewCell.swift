@@ -11,6 +11,7 @@ import Alamofire
 class NewsTableViewCell: UITableViewCell {
 
     let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
+    var gradient: CAGradientLayer?
 
     
     var image = UIImageView()
@@ -56,29 +57,39 @@ class NewsTableViewCell: UITableViewCell {
         title.leftAnchor.constraint(equalTo: image.leftAnchor, constant: 10).isActive = true
     }
     
-    override func layoutSublayers(of layer: CALayer) {
-        
-        let width = self.bounds.width
-        let height = self.bounds.height
-        let sHeight:CGFloat = 200
-        
-        if image.layer.sublayers?.first is CAGradientLayer {
-            }
-        else {
-            let gradient = CAGradientLayer()
-          //  gradient.colors = [UIColor.clear.cgColor, colorPrimary]
-            gradient.colors = [UIColor.clear.cgColor, UIColor.gray.cgColor]
-            gradient.frame = CGRect(x: 0, y: height - sHeight, width: width, height: sHeight)
-            image.layer.insertSublayer(gradient, at: 0)
-        }
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by:  UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
 
-    }
+        let width = self.contentView.bounds.width
+        let height = self.contentView.bounds.height
+        let sHeight: CGFloat = 200
 
+        if gradient == nil {
+            gradient = CAGradientLayer()
+            gradient?.colors = [UIColor.clear.cgColor, UIColor.gray.cgColor]
+            gradient?.frame = CGRect(x: 0, y: height - sHeight, width: width, height: sHeight)
+            self.image.layer.insertSublayer(gradient!, at: 0)
+        } else {
+            gradient?.frame = CGRect(x: 0, y: height - sHeight, width: width, height: sHeight)
+        }
+    }
+    
+    override func willTransition(to state: UITableViewCell.StateMask) {
+        super.willTransition(to: state)
+
+        if let gradient = self.gradient {
+            let width = self.contentView.bounds.width
+            let height = self.contentView.bounds.height
+            let sHeight: CGFloat = 200
+
+            if UIDevice.current.orientation.isLandscape {
+                gradient.frame = CGRect(x: width - sHeight, y: 0, width: sHeight, height: height)
+            } else {
+                gradient.frame = CGRect(x: 0, y: height - sHeight, width: width, height: sHeight)
+            }
+        }
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

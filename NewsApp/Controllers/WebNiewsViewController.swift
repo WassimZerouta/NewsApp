@@ -10,6 +10,8 @@ import WebKit
 
 class WebNiewsViewController: UIViewController {
     
+    let activityIndicator = UIActivityIndicatorView(style: .gray)
+    
     var article = CD_Article(context: CoreDataStack.sharedInstance.viewContext)
     var stringUrl = String()
     var desc = String()
@@ -58,6 +60,13 @@ class WebNiewsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
         webView.navigationDelegate = self
+        
+        // Ajouter l'indicateur d'activité à la vue principale
+        view.addSubview(activityIndicator)
+
+        // Régler le centre de l'indicateur d'activité pour qu'il soit centré sur l'écran
+        activityIndicator.center = view.center
+        
         createWebView()
         createNavItemButtons()
         createbookmarkButton()
@@ -188,15 +197,32 @@ class WebNiewsViewController: UIViewController {
     
     func loadNewsUrl(_ stringUrl: String) {
         let newsUrl = URL(string: stringUrl)
+        
+        // Crée un objet de file d'attente globale en arrière-plan
+        let backgroundQueue = DispatchQueue.global(qos: .background)
+        
         if let url = newsUrl {
-            DispatchQueue.main.async {
-                self.webView.load(URLRequest(url: url))
+            
+            activityIndicator.startAnimating()
+
+            // Crée un objet de file d'attente globale en arrière-plan
+            let backgroundQueue = DispatchQueue.global(qos: .background)
+
+            // Exécute la tâche en arrière-plan
+            backgroundQueue.async {
+                // Charge l'URL dans le WKWebView
+                let request = URLRequest(url: url)
+                // Reviens sur le thread principal pour mettre à jour l'interface utilisateur
+                DispatchQueue.main.async {
+                    // Arrête l'indicateur d'activité pour montrer que la tâche est terminée
+                    self.webView.load(request)
+                    self.activityIndicator.stopAnimating()
+                }
             }
         }
-        else {
-            print("ERR: INNACCESSIBLE CONTENT")
-        }
     }
+    
+    
 
 }
 
