@@ -36,21 +36,34 @@ class NewsTableViewCell: UITableViewCell {
         label.baselineAdjustment = .none
         return label
     }()
+    
+    var barSeparator: UIView = {
+        let view = UIView()
+        return view
+    }()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         
         contentView.addSubview(image)
+        contentView.addSubview(barSeparator)
         image.addSubview(title)
         
         image.translatesAutoresizingMaskIntoConstraints = false
         title.translatesAutoresizingMaskIntoConstraints = false
+        barSeparator.translatesAutoresizingMaskIntoConstraints = false
         
         image.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-        image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        image.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5).isActive = true
         image.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         image.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        
+        barSeparator.topAnchor.constraint(equalTo: image.bottomAnchor).isActive = true
+        barSeparator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        barSeparator.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
+        barSeparator.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
+        barSeparator.backgroundColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 0.5)
  
         title.bottomAnchor.constraint(equalTo: image.bottomAnchor, constant:  -10).isActive = true
         title.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
@@ -59,8 +72,8 @@ class NewsTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by:  UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
 
+        
         let width = self.contentView.bounds.width
         let height = self.contentView.bounds.height
         let sHeight: CGFloat = 200

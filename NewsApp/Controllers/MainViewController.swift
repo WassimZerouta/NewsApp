@@ -11,6 +11,7 @@ import Alamofire
 class MainViewController: UIViewController {
     
     var subject: String?
+    var selectedIndex: IndexPath?
     
     
     let headerView = UIView()
@@ -18,7 +19,6 @@ class MainViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         var collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.backgroundColor = .systemGroupedBackground
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
@@ -79,15 +79,15 @@ class MainViewController: UIViewController {
         self.view.addSubview(headerView)
         headerView.addSubview(title)
         headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        headerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         headerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         headerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         headerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         title.translatesAutoresizingMaskIntoConstraints = false
-        title.text = "NEWS APP"
-        title.font = UIFont(name:"Futura-Bold", size: 30.0)
-        title.textColor = colorPrimaryDark
+        title.text = "NEWSAPP"
+        title.font = UIFont(name:"Futura-Bold", size: 25.0)
+        title.textColor = colorPrimary
         title.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
         title.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
@@ -97,10 +97,11 @@ class MainViewController: UIViewController {
         self.view.addSubview(collectionView)
         collectionView.isUserInteractionEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor, constant: 20).isActive = true
+        collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        collectionView.backgroundColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 0.7)
     }
     
     func createTableView() {
@@ -154,7 +155,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return view.frame.height/3-20 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -163,6 +164,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         guard let url = articles![indexPath.row].url else {return}
         guard let urlToImage = articles![indexPath.row].urlToImage else {return}
         let vc = WebNiewsViewController(url: url, titles: title, desc: description, urlToImage: urlToImage)
+        vc.modalPresentationStyle = .fullScreen
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
     }
@@ -170,21 +172,26 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         cd_favoriteSubject.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
-        cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
-        cell.contentView.layer.cornerRadius = 7
-        cell.contentView.backgroundColor = colorPrimary
-        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         fetchArticles(cd_favoriteSubject[indexPath.row].name!)
         tableView.reloadData()
+        if let selected = selectedIndex {
+            collectionView.deselectItem(at: selected, animated: false)
+        }
+        selectedIndex = indexPath
+        collectionView.reloadData()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
+        cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
+        cell.titleLabel.textColor = indexPath != selectedIndex ? .white : colorPrimaryDark
+        return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

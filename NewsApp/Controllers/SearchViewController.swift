@@ -23,15 +23,7 @@ class SearchViewController: UIViewController {
         return searchBar
     }()
     
-    let animation: LottieAnimationView = {
-        var animation = LottieAnimationView()
-        animation = .init(name: "news")
-        animation.contentMode = .scaleToFill
-        animation.loopMode = .playOnce
-        animation.animationSpeed = 1.5
-        animation.alpha = 0.5
-        return animation
-    }()
+    let animation = UIImageView()
     
     let addFavoriteSubjectButton : UIButton = {
        let button = UIButton()
@@ -42,7 +34,7 @@ class SearchViewController: UIViewController {
     
     let favoriteSubjectLabel: UILabel = {
         let label = UILabel()
-        label.text = "Your Favorites Subjects !"
+        label.text = "Favorites Subjects !"
         label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         return label
@@ -64,14 +56,23 @@ class SearchViewController: UIViewController {
         createFavoriteSubjectLabel()
         createAddFavoriteSubjectButton()
         createFavoritesSection()
-        collectionView.backgroundView = animation
-        animation.play()
+        if cd_favoriteSubject.count == 0 {
+            alert()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshCollectionView()
         
+    }
+    
+    func alert() {
+        let alert = UIAlertController(title: "Add your favorites topics !", message: " You still don't have a favorite topic ! You can add more by pressing the plus button. \n You will find them on the home page.", preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func createSearchBar() {
@@ -133,7 +134,7 @@ class SearchViewController: UIViewController {
                 }
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
                 alertController.addTextField { (textField) in
-                    textField.placeholder = "Sport, music.."
+                    textField.placeholder = "Sport, Music.."
                 }
                 alertController.addAction(confirmAction)
                 alertController.addAction(cancelAction)
@@ -158,8 +159,7 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchArray.append(searchBar.text!)
         print(searchArray)
-        let vc = MainViewController()
-        vc.subject = searchBar.text
+        let vc = SearchResultViewController(subject: searchBar.text!)
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
     }

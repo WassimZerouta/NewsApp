@@ -19,14 +19,13 @@ class BookmarksViewController: UIViewController {
     
     let titleLabel: UILabel = {
         var label = UILabel()
-        label.text = "Your Bookmarks !"
+        label.text = "Bookmarks !"
         label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         return label
     }()
 
     override func viewDidLoad(){
-        navigationItem.title = "BBB"
         super.viewDidLoad()
         createTitle()
         createTableView()
@@ -101,8 +100,19 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         else { let defaultCell = UITableViewCell(); return defaultCell }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let title = cd_articles[indexPath.row].title else {return}
+        guard let description = cd_articles[indexPath.row].desc else {return}
+        guard let url = cd_articles[indexPath.row].url else {return}
+        guard let urlToImage = cd_articles[indexPath.row].urlToImage else {return}
+        let vc = WebNiewsViewController(url: url, titles: title, desc: description, urlToImage: urlToImage)
+        vc.modalPresentationStyle = .fullScreen
+        let navVc = UINavigationController(rootViewController: vc)
+        present(navVc, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 200
+        return view.frame.height/3-20 
     }
     
 }

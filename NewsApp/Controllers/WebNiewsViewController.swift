@@ -9,8 +9,7 @@ import UIKit
 import WebKit
 
 class WebNiewsViewController: UIViewController {
-    
-    let activityIndicator = UIActivityIndicatorView(style: .gray)
+
     
     var article = CD_Article(context: CoreDataStack.sharedInstance.viewContext)
     var stringUrl = String()
@@ -45,13 +44,17 @@ class WebNiewsViewController: UIViewController {
     let bookmarkButton: UIButton = {
         var button = UIButton()
         button.setImage(UIImage(systemName: "bookmark.fill"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
     
     let drawableButton: UIButton = {
         var button = UIButton()
-        button.setImage(UIImage(systemName: "pencil"), for: .normal)
+        button.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
@@ -60,12 +63,6 @@ class WebNiewsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
         webView.navigationDelegate = self
-        
-        // Ajouter l'indicateur d'activité à la vue principale
-        view.addSubview(activityIndicator)
-
-        // Régler le centre de l'indicateur d'activité pour qu'il soit centré sur l'écran
-        activityIndicator.center = view.center
         
         createWebView()
         createNavItemButtons()
@@ -100,11 +97,11 @@ class WebNiewsViewController: UIViewController {
                 title == articleTitle
             }) {
                 self.article.isAdded = true
-                color = UIColor.systemGreen
+                color = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
             }
             else {
                 self.article.isAdded = false
-               color = UIColor.red
+                color = .gray
             }
         return color
     }
@@ -115,16 +112,16 @@ class WebNiewsViewController: UIViewController {
         webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         webView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         webView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        webView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -70).isActive = true
     }
     
     func createbookmarkButton() {
         self.view.addSubview(bookmarkButton)
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
-        bookmarkButton.topAnchor.constraint(equalTo: webView.bottomAnchor).isActive = true
+        bookmarkButton.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20).isActive = true
         bookmarkButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        bookmarkButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        bookmarkButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        bookmarkButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        bookmarkButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
         bookmarkButton.addTarget(self, action: #selector(bookmarkHandler), for: .touchUpInside)
         
     }
@@ -132,16 +129,16 @@ class WebNiewsViewController: UIViewController {
     func createDrawableButton() {
         self.view.addSubview(drawableButton)
         drawableButton.translatesAutoresizingMaskIntoConstraints = false
-        drawableButton.topAnchor.constraint(equalTo: webView.bottomAnchor).isActive = true
-        drawableButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -100).isActive = true
-        drawableButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        drawableButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        drawableButton.topAnchor.constraint(equalTo: webView.bottomAnchor, constant: 20).isActive = true
+        drawableButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        drawableButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        drawableButton.widthAnchor.constraint(equalToConstant: 30).isActive = true
         drawableButton.addTarget(self, action: #selector(drowableHandler), for: .touchUpInside)
         
     }
     
     func createNavItemButtons() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrowshape.backward"), style: .done, target: self, action: #selector(backButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(backButton))
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .done, target: self, action: #selector(shareButton))
         
@@ -174,14 +171,14 @@ class WebNiewsViewController: UIViewController {
     func saveArticle(title: String, desc: String, url: String, urlToImage: String, isAdded: Bool) {
         // create entity instance with context
         article = CD_ArticleRepository().saveArticle(title: title, desc: desc, url: url, urlToImage: urlToImage, isAdded: isAdded) {
-            bookmarkButton.tintColor = .systemGreen
+            bookmarkButton.tintColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         }
     }
     
     
     func removeArticle(article: CD_Article) {
         CD_ArticleRepository().removeArticles(article: article) {
-            bookmarkButton.tintColor = .red
+            bookmarkButton.tintColor = .gray
         }
     }
     
@@ -197,13 +194,9 @@ class WebNiewsViewController: UIViewController {
     
     func loadNewsUrl(_ stringUrl: String) {
         let newsUrl = URL(string: stringUrl)
-        
-        // Crée un objet de file d'attente globale en arrière-plan
-        let backgroundQueue = DispatchQueue.global(qos: .background)
+
         
         if let url = newsUrl {
-            
-            activityIndicator.startAnimating()
 
             // Crée un objet de file d'attente globale en arrière-plan
             let backgroundQueue = DispatchQueue.global(qos: .background)
@@ -216,7 +209,6 @@ class WebNiewsViewController: UIViewController {
                 DispatchQueue.main.async {
                     // Arrête l'indicateur d'activité pour montrer que la tâche est terminée
                     self.webView.load(request)
-                    self.activityIndicator.stopAnimating()
                 }
             }
         }

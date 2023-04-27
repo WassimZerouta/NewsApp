@@ -23,6 +23,7 @@
 		577BE33B29D5A8A7001DA88A /* NewsAPIResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577BE33A29D5A8A7001DA88A /* NewsAPIResult.swift */; };
 		577BE33D29D5B7D8001DA88A /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 577BE33C29D5B7D8001DA88A /* NewsTableViewCell.swift */; };
 		57AFBA8A29E9FFD500D50F15 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AFBA8929E9FFD500D50F15 /* CustomCollectionViewCell.swift */; };
+		57B5EEDD29FB0CBD00D0E42B /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5EEDC29FB0CBD00D0E42B /* SearchResultViewController.swift */; };
 		57CACF0E29CF8684008D17E3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CACF0D29CF8684008D17E3 /* AppDelegate.swift */; };
 		57CACF1029CF8684008D17E3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CACF0F29CF8684008D17E3 /* SceneDelegate.swift */; };
 		57CACF1229CF8684008D17E3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57CACF1129CF8684008D17E3 /* MainViewController.swift */; };
@@ -61,6 +62,7 @@
 		577BE33A29D5A8A7001DA88A /* NewsAPIResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsAPIResult.swift; sourceTree = "<group>"; };
 		577BE33C29D5B7D8001DA88A /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		57AFBA8929E9FFD500D50F15 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		57B5EEDC29FB0CBD00D0E42B /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
 		57CACF0A29CF8684008D17E3 /* NewsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		57CACF0D29CF8684008D17E3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		57CACF0F29CF8684008D17E3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 				575DEB5329E6BD4800E425E2 /* BookmarksViewController.swift */,
 				575DEB5529E6C0DF00E425E2 /* WebNiewsViewController.swift */,
 				57ED519429F16E7D006EF9E0 /* DrowableViewController.swift */,
+				57B5EEDC29FB0CBD00D0E42B /* SearchResultViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				577BE33D29D5B7D8001DA88A /* NewsTableViewCell.swift in Sources */,
 				575DEB5C29E8117200E425E2 /* CoreDataStack.swift in Sources */,
 				577BE33629D5A819001DA88A /* NewsAPIHelper.swift in Sources */,
+				57B5EEDD29FB0CBD00D0E42B /* SearchResultViewController.swift in Sources */,
 				575DEB6029E8237900E425E2 /* CD_ArticleRepository.swift in Sources */,
 				57CACF0E29CF8684008D17E3 /* AppDelegate.swift in Sources */,
 				575DEB5E29E8156600E425E2 /* CD_Article.swift in Sources */,
@@ -531,7 +535,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zerouta.wassim.NewsApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -558,7 +562,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1.0;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zerouta.wassim.NewsApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
