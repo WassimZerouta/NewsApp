@@ -56,14 +56,14 @@ class SearchViewController: UIViewController {
         createFavoriteSubjectLabel()
         createAddFavoriteSubjectButton()
         createFavoritesSection()
-        if cd_favoriteSubject.count == 0 {
-            alert()
-        }
+        let closeKeyboard = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
+            view.addGestureRecognizer(closeKeyboard)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshCollectionView()
+        print(cd_favoriteSubject)
         
     }
     
@@ -148,6 +148,10 @@ class SearchViewController: UIViewController {
                 self.cd_favoriteSubject = CD_FavoriteSubject
                 self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
                     cd_favoriteSubject.name == nil
+                    
+                }
+                if self.cd_favoriteSubject.isEmpty {
+                    self.alert()
                 }
                 self.collectionView.reloadData()
             }
@@ -159,6 +163,7 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchArray.append(searchBar.text!)
         print(searchArray)
+        view.endEditing(true)
         let vc = SearchResultViewController(subject: searchBar.text!)
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
@@ -187,14 +192,10 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             alert.addAction(UIAlertAction(title: "Delete",
                                           style: UIAlertAction.Style.destructive,
                                           handler: {(_: UIAlertAction!) in
-                
-                for favorite in self.cd_favoriteSubject {
-                    if favorite.name == self.favoriteSubject.name {
-                        CD_FavoriteSubjectRepository().removeFavoriteSubject(favoriteSubject: self.favoriteSubject) {
-                            print("Delete")
-                        }
+                        CD_FavoriteSubjectRepository().removeFavoriteSubject(favoriteSubject: self.cd_favoriteSubject[indexPath.row]) {
+                            print("delete")
+                        
                         self.refreshCollectionView()
-                    }
                 }
             }))
             self.present(alert, animated: true, completion: nil)
