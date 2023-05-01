@@ -19,7 +19,7 @@ class BookmarksViewController: UIViewController {
     
     let titleLabel: UILabel = {
         var label = UILabel()
-        label.text = "Bookmarks !"
+        label.text = "Bookmarks"
         label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         return label

@@ -14,7 +14,7 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
     
     let topView: UIView = {
         let view = UIView()
-        view.isUserInteractionEnabled = true
+        view.backgroundColor = .groupTableViewBackground
         return view
     }()
     

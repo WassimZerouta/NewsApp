@@ -63,7 +63,7 @@ class NewsTableViewCell: UITableViewCell {
         barSeparator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         barSeparator.rightAnchor.constraint(equalTo: contentView.rightAnchor).isActive = true
         barSeparator.leftAnchor.constraint(equalTo: contentView.leftAnchor).isActive = true
-        barSeparator.backgroundColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 0.5)
+        barSeparator.backgroundColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1)
  
         title.bottomAnchor.constraint(equalTo: image.bottomAnchor, constant:  -10).isActive = true
         title.rightAnchor.constraint(equalTo: image.rightAnchor, constant: -10).isActive = true
