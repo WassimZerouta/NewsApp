@@ -18,7 +18,6 @@ class SearchViewController: UIViewController {
     let searchBar: UISearchBar = {
         var searchBar = UISearchBar()
         searchBar.isHidden = false
-        // searchBar.borderColor = Colors.colorPrimary()
         searchBar.placeholder = "Search.."
         return searchBar
     }()
@@ -34,7 +33,7 @@ class SearchViewController: UIViewController {
     
     let favoriteSubjectLabel: UILabel = {
         let label = UILabel()
-        label.text = "Favorites Subjects !"
+        label.text = "Topics"
         label.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         label.textColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         return label
@@ -56,10 +55,15 @@ class SearchViewController: UIViewController {
         createFavoriteSubjectLabel()
         createAddFavoriteSubjectButton()
         createFavoritesSection()
+        if self.cd_favoriteSubject.isEmpty {
+            self.alert()
+        }
         let closeKeyboard = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
-            view.addGestureRecognizer(closeKeyboard)
+        closeKeyboard.cancelsTouchesInView = false
+        view.addGestureRecognizer(closeKeyboard)
     }
     
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshCollectionView()
@@ -149,9 +153,6 @@ class SearchViewController: UIViewController {
                 self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
                     cd_favoriteSubject.name == nil
                     
-                }
-                if self.cd_favoriteSubject.isEmpty {
-                    self.alert()
                 }
                 self.collectionView.reloadData()
             }
