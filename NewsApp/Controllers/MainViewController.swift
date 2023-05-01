@@ -37,17 +37,34 @@ class MainViewController: UIViewController {
     let colorOrange = UIColor(red: 1.00, green: 0.27, blue: 0.00, alpha: 1.00)
     
     let cellReuseIdentifier = "cell"
+    
+    let refreshController: UIRefreshControl = {
+        let refreshController = UIRefreshControl()
+        return refreshController
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         if let search = subject { fetchArticles(search)} else { fetchArticles("Google")}
         view.backgroundColor = .systemGroupedBackground
         createHeaderView()
-        createFavoritesSection()
         createTableView()
+        createFavoritesSection()
         setupTableView()
         setupCollectionView()
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+         if scrollView.contentOffset.y > 0 {
+             UIView.animate(withDuration: 0.3) {
+                 self.collectionView.alpha = 0
+             }
+         } else {
+             UIView.animate(withDuration: 0.3) {
+                 self.collectionView.alpha = 1
+             }
+         }
+     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -57,6 +74,7 @@ class MainViewController: UIViewController {
                 self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
                     cd_favoriteSubject.name == nil
                 }
+                if self.cd_favoriteSubject.isEmpty { self.collectionView.isHidden = true} else { self.collectionView.isHidden = false}
                 self.collectionView.reloadData()
             }
         }
@@ -94,23 +112,26 @@ class MainViewController: UIViewController {
     }
     
     private func createFavoritesSection() {
-        self.view.addSubview(collectionView)
+        tableView.addSubview(collectionView)
         collectionView.isUserInteractionEnabled = true
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: tableView.topAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        collectionView.backgroundColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 0.7)
+        collectionView.backgroundColor = .systemGroupedBackground.withAlphaComponent(0.9)
     }
     
     func createTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: collectionView.bottomAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.addSubview(refreshController)
+        refreshController.tintColor = colorPrimary
+        refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
     
     func setupTableView() {
@@ -123,6 +144,11 @@ class MainViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCollectionViewCell")
+    }
+    
+    @objc func refreshData() {
+        if let search = subject { fetchArticles(search)} else { fetchArticles("Google")}
+        refreshController.endRefreshing()
     }
 
 }
@@ -190,7 +216,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
-        cell.titleLabel.textColor = indexPath != selectedIndex ? .white : colorPrimaryDark
+        cell.titleLabel.textColor = indexPath != selectedIndex ? colorPrimary : colorPrimaryDark
         return cell
     }
     
