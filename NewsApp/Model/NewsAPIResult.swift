@@ -2,7 +2,7 @@
 //  NewsAPIResult.swift
 //  NewsApp
 //
-//  Created by Wass on 30/03/2023.
+//  Created by Wass on 03/06/2023.
 //
 
 import Foundation
@@ -28,3 +28,4 @@ struct Source: Decodable {
     
     var name: String?
 }
+

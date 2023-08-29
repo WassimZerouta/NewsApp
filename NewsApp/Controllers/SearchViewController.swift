@@ -55,9 +55,6 @@ class SearchViewController: UIViewController {
         createFavoriteSubjectLabel()
         createAddFavoriteSubjectButton()
         createFavoritesSection()
-        if self.cd_favoriteSubject.isEmpty {
-            self.alert()
-        }
         let closeKeyboard = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
         closeKeyboard.cancelsTouchesInView = false
         view.addGestureRecognizer(closeKeyboard)
@@ -68,6 +65,14 @@ class SearchViewController: UIViewController {
         super.viewWillAppear(animated)
         refreshCollectionView()
         print(cd_favoriteSubject)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.cd_favoriteSubject.isEmpty {
+            self.alert()
+        }
         
     }
     
@@ -160,12 +165,28 @@ class SearchViewController: UIViewController {
     }
 }
 
+func stringArray(array: [String]) -> String {
+    
+    var search = array.joined(separator: "%20+")
+    search.removeAll { Character in
+        Character == ","
+    }
+    let array = search.components(separatedBy: " ")
+    search = array.joined(separator: "%20+")
+    return search
+}
+
+
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchArray.append(searchBar.text!)
         print(searchArray)
         view.endEditing(true)
-        let vc = SearchResultViewController(subject: searchBar.text!)
+        let searchText = stringArray(array: searchArray)
+        let vc = SearchResultViewController(subject: searchText)
+        searchArray.removeAll()
+        vc.navigationItem.title = searchBar.text!
+        vc.modalPresentationStyle = .fullScreen
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
     }

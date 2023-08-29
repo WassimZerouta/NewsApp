@@ -2,33 +2,56 @@
 //  NewsAppTests.swift
 //  NewsAppTests
 //
-//  Created by Wass on 11/04/2023.
+//  Created by Wass on 03/06/2023.
 //
 
 import XCTest
+@testable import NewsApp
 
 final class NewsAppTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    func testPerformRequestWithMock() {
+        // Créer une instance de mock avec les données de réponse réussie
+        let fakeResponseData = FakeResponseData()
+        let mockHelper = NewsAPIHelperMock(fakeResponseData: fakeResponseData.successData!)
+        
+        // Appeler la méthode performRequest avec le mock
+        mockHelper.performRequest(q: "apple") { success, articles in
+            // Vérifier que la méthode performRequest du mock a été appelée
+            XCTAssertTrue(mockHelper.performRequestCalled)
+            
+            // Vérifier que les paramètres de l'appel sont corrects
+            XCTAssertEqual(mockHelper.performRequestQArgument, "apple")
+            
+            // Vérifier que la réponse contient des articles fictifs
+            XCTAssertNotNil(articles)
+            XCTAssertEqual(articles?.count, 2) // Vérifier le nombre d'articles
+            
+            // Vérifier le contenu des articles si nécessaire
+            
+            // Vérifier que la complétion a été appelée avec succès
+            XCTAssertTrue(success)
+        }
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+    func testPerformRequestWithMockFailure() {
+        // Créer une instance de mock avec les données de réponse en erreur
+        let fakeResponseData = FakeResponseData()
+        let mockHelper = NewsAPIHelperMock(fakeResponseData: fakeResponseData.errorData!)
+        
+        // Appeler la méthode performRequest avec le mock
+        mockHelper.performRequest(q: "apple") { success, articles in
+            // Vérifier que la méthode performRequest du mock a été appelée
+            XCTAssertTrue(mockHelper.performRequestCalled)
+            
+            // Vérifier que les paramètres de l'appel sont corrects
+            XCTAssertEqual(mockHelper.performRequestQArgument, "apple")
+            
+            // Vérifier que la réponse est nulle en cas d'erreur
+            XCTAssertNil(articles)
+            
+            // Vérifier que la complétion a été appelée avec une erreur
+            XCTAssertFalse(success)
         }
     }
 

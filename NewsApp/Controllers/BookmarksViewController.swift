@@ -31,6 +31,16 @@ class BookmarksViewController: UIViewController {
         createTableView()
         setupTableView()
         view.backgroundColor = .systemGroupedBackground
+        CD_ArticleRepository().getArticles { CD_Articles in
+            DispatchQueue.main.async {
+                self.cd_articles = CD_Articles
+                self.cd_articles.removeAll { cd_article in
+                    cd_article.title == nil
+                }
+                if self.cd_articles.isEmpty { self.alert()}
+            }
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,11 +56,24 @@ class BookmarksViewController: UIViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cell")
     }
+    
+    func alert() {
+        let alert = UIAlertController(title: "Add your favorites news !", message: " You still don't have bookmarks ! You can add more by pressing the bookmarks button in the news", preferredStyle: .alert)
+
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+
     
     func createTitle() {
         self.view.addSubview(titleLabel)

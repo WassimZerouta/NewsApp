@@ -32,6 +32,9 @@ class SearchResultViewController: UIViewController {
         view.backgroundColor = .systemGroupedBackground
         createTableView()
         setupTableView()
+        let backButton = UIBarButtonItem(title: "Dismiss", style: .plain, target: self, action: #selector(backButtonPressed))
+        navigationItem.leftBarButtonItem = backButton
+
     }
     
     func fetchArticles(_ q: String) {
@@ -42,6 +45,10 @@ class SearchResultViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+    }
+   
+    @objc func backButtonPressed() {
+        dismiss(animated: true)
     }
     
     func createTableView() {

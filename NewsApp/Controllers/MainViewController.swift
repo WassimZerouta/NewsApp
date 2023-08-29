@@ -45,26 +45,25 @@ class MainViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let search = subject { fetchArticles(search)} else { fetchArticles("Google")}
         view.backgroundColor = .systemGroupedBackground
         createHeaderView()
         createTableView()
         createFavoritesSection()
         setupTableView()
         setupCollectionView()
+        
+        CD_FavoriteSubjectRepository().getFavoriteSubject { CD_FavoriteSubject in
+            DispatchQueue.main.async {
+                self.cd_favoriteSubject = CD_FavoriteSubject
+                self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
+                    cd_favoriteSubject.name == nil
+                }
+                if !self.cd_favoriteSubject.isEmpty {self.fetchArticles(self.cd_favoriteSubject[0].name!)} else { self.fetchArticles("Apple")}
+                if self.cd_favoriteSubject.isEmpty { self.collectionView.isHidden = true} else { self.collectionView.isHidden = false}
+                self.collectionView.reloadData()
+            }
+        }
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-         if scrollView.contentOffset.y > 0 {
-             UIView.animate(withDuration: 0.3) {
-                 self.collectionView.alpha = 0
-             }
-         } else {
-             UIView.animate(withDuration: 0.3) {
-                 self.collectionView.alpha = 1
-             }
-         }
-     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -78,7 +77,20 @@ class MainViewController: UIViewController {
                 self.collectionView.reloadData()
             }
         }
+          
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+         if scrollView.contentOffset.y > 0 {
+             UIView.animate(withDuration: 0.3) {
+                 self.collectionView.alpha = 0
+             }
+         } else {
+             UIView.animate(withDuration: 0.3) {
+                 self.collectionView.alpha = 1
+             }
+         }
+     }
     
     func fetchArticles(_ q: String) {
         
@@ -118,7 +130,7 @@ class MainViewController: UIViewController {
         collectionView.topAnchor.constraint(equalTo: tableView.topAnchor).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         collectionView.backgroundColor = .systemGroupedBackground.withAlphaComponent(0.9)
     }
     
@@ -147,7 +159,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func refreshData() {
-        if let search = subject { fetchArticles(search)} else { fetchArticles("Google")}
+        if cd_favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(cd_favoriteSubject[selectedIndex?.row ?? 0].name!)}
         refreshController.endRefreshing()
     }
 
@@ -216,7 +228,11 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
-        cell.titleLabel.textColor = indexPath != selectedIndex ? colorPrimary : colorPrimaryDark
+        if selectedIndex == nil && indexPath.row == 0 {
+            cell.titleLabel.textColor = colorPrimaryDark
+        } else {
+            cell.titleLabel.textColor = indexPath != selectedIndex ? colorPrimary : colorPrimaryDark
+        }
         return cell
     }
     
