@@ -70,6 +70,11 @@ class NewsTableViewCell: UITableViewCell {
         title.leftAnchor.constraint(equalTo: image.leftAnchor, constant: 10).isActive = true
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        image.image = nil
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
 

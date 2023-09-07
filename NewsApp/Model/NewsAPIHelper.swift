@@ -18,8 +18,8 @@ class NewsAPIHelper {
     init(session: Session = AF ) {
         self.session = session
     }
-    
-    let baseURL = "https://newsapi.org/v2/everything?sortBy=popularity&apiKey=10206633f4524d4a8636d39049e726a6&q="
+        
+    let baseURL = "https://newsapi.org/v2/everything?apiKey=10206633f4524d4a8636d39049e726a6&q="
     
     
     func getUrl(q: String) -> String? {
@@ -36,6 +36,7 @@ class NewsAPIHelper {
                     switch response.result {
                     case .success(_):
                         guard let result = response.value else { return }
+                        print(result)
                         completion( true, result.articles)
                         
                     case .failure(let error):

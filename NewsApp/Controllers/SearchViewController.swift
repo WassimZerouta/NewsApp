@@ -10,7 +10,6 @@ import Lottie
 
 class SearchViewController: UIViewController {
     
-    var favoriteSubject = CD_FavoriteSubject(context: CoreDataStack.sharedInstance.viewContext)
     var cd_favoriteSubject = [CD_FavoriteSubject]()
     
     var searchArray = [String]()
@@ -21,9 +20,7 @@ class SearchViewController: UIViewController {
         searchBar.placeholder = "Search.."
         return searchBar
     }()
-    
-    let animation = UIImageView()
-    
+        
     let addFavoriteSubjectButton : UIButton = {
        let button = UIButton()
         button.setImage(UIImage(systemName: "plus.app"), for: .normal)
@@ -64,8 +61,6 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshCollectionView()
-        print(cd_favoriteSubject)
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -135,7 +130,7 @@ class SearchViewController: UIViewController {
                 let confirmAction = UIAlertAction(title: "Add", style: .default) { (_) in
                     if let txtField = alertController.textFields?.first, let text = txtField.text {
                             // create entity instance with context
-                        self.favoriteSubject = CD_FavoriteSubjectRepository().saveFavoriteSubject(name: text, isAdded: true, completion: {
+                         CD_FavoriteSubjectRepository().saveFavoriteSubject(name: text, isAdded: true, completion: {
                             print("\(text) is added")
                         })
                         self.refreshCollectionView()
@@ -200,6 +195,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
+        cell.barSeparator.backgroundColor = .white.withAlphaComponent(0.0)
         cell.contentView.layer.cornerRadius = 7
         cell.contentView.backgroundColor = colorPrimary
         return cell

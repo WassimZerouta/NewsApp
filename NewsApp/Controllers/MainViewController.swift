@@ -13,7 +13,6 @@ class MainViewController: UIViewController {
     var subject: String?
     var selectedIndex: IndexPath?
     
-    
     let headerView = UIView()
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -51,31 +50,22 @@ class MainViewController: UIViewController {
         createFavoritesSection()
         setupTableView()
         setupCollectionView()
-        
-        CD_FavoriteSubjectRepository().getFavoriteSubject { CD_FavoriteSubject in
-            DispatchQueue.main.async {
-                self.cd_favoriteSubject = CD_FavoriteSubject
-                self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
-                    cd_favoriteSubject.name == nil
-                }
-                if !self.cd_favoriteSubject.isEmpty {self.fetchArticles(self.cd_favoriteSubject[0].name!)} else { self.fetchArticles("Apple")}
-                if self.cd_favoriteSubject.isEmpty { self.collectionView.isHidden = true} else { self.collectionView.isHidden = false}
-                self.collectionView.reloadData()
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        CD_FavoriteSubjectRepository().getFavoriteSubject { CD_FavoriteSubject in
+        CD_FavoriteSubjectRepository().getFavoriteSubject { favorite in
             DispatchQueue.main.async {
-                self.cd_favoriteSubject = CD_FavoriteSubject
-                self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
-                    cd_favoriteSubject.name == nil
+                self.cd_favoriteSubject = favorite
+                self.cd_favoriteSubject.removeAll { favorite in
+                    favorite.name == nil
                 }
-                if self.cd_favoriteSubject.isEmpty { self.collectionView.isHidden = true} else { self.collectionView.isHidden = false}
+                guard !self.cd_favoriteSubject.isEmpty else { return self.collectionView.isHidden = true }
+                self.collectionView.isHidden = false
+                
                 self.collectionView.reloadData()
             }
+            if cd_favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(cd_favoriteSubject[selectedIndex?.row ?? 0].name ?? "Apple")}
         }
           
     }

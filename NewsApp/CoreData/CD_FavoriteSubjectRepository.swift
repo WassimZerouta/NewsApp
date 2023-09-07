@@ -33,7 +33,7 @@ final class CD_FavoriteSubjectRepository {
         }
     }
 
-    func saveFavoriteSubject(name: String, isAdded: Bool, completion: () -> Void) -> CD_FavoriteSubject {
+    func saveFavoriteSubject(name: String, isAdded: Bool, completion: () -> Void)  {
         
         let favoriteSubject = CD_FavoriteSubject(context: CoreDataStack.sharedInstance.viewContext)
         favoriteSubject.name = name
@@ -45,7 +45,6 @@ final class CD_FavoriteSubjectRepository {
         catch {
             print("We are unable to save \(favoriteSubject.name ?? "the article")")
         }
-        return favoriteSubject
     }
     
     func removeFavoriteSubject(favoriteSubject: CD_FavoriteSubject, completion: () -> Void) {

@@ -8,6 +8,8 @@
 import UIKit
 
 class CustomCollectionViewCell: UICollectionViewCell {
+    
+    
 
     var titleLabel: UILabel = {
         var label = UILabel()
