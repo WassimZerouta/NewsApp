@@ -188,6 +188,14 @@
 			path = CoreDataTest;
 			sourceTree = "<group>";
 		};
+		579B319F2AD6AF4400504F80 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				579B319E2AD6ADD200504F80 /* GoogleService-Info.plist */,
+			);
+			path = Downloads;
+			sourceTree = "<group>";
+		};
 		57CACF0129CF8684008D17E3 = {
 			isa = PBXGroup;
 			children = (
@@ -210,7 +218,7 @@
 		57CACF0C29CF8684008D17E3 /* NewsApp */ = {
 			isa = PBXGroup;
 			children = (
-				579B319E2AD6ADD200504F80 /* GoogleService-Info.plist */,
+				579B319F2AD6AF4400504F80 /* Downloads */,
 				57785FFF2A2BAAE200A91B77 /* Model */,
 				5761D6DA29CF8C6B00A2E262 /* Views */,
 				5761D6D929CF8C5B00A2E262 /* Controllers */,
