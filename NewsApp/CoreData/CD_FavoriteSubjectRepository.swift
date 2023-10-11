@@ -12,11 +12,11 @@ final class CD_FavoriteSubjectRepository {
     
     // MARK: - Properties
 
-    private let coreDataStack: CoreDataStack
+    private let coreDataStack: CoreDataStackProtocol
 
     // MARK: - Init
 
-    init(coreDataStack: CoreDataStack = CoreDataStack.sharedInstance) {
+    init(coreDataStack: CoreDataStackProtocol) {
       self.coreDataStack = coreDataStack
     }
 
@@ -33,24 +33,24 @@ final class CD_FavoriteSubjectRepository {
         }
     }
 
-    func saveFavoriteSubject(name: String, isAdded: Bool, completion: () -> Void)  {
-        
-        let favoriteSubject = CD_FavoriteSubject(context: CoreDataStack.sharedInstance.viewContext)
+    func saveFavoriteSubject(name: String, isAdded: Bool, completion: () -> Void) -> CD_FavoriteSubject  {
+        let favoriteSubject = CD_FavoriteSubject(context: coreDataStack.viewContext)
         favoriteSubject.name = name
         favoriteSubject.isAdded = isAdded
         do {
-            try  CoreDataStack.sharedInstance.viewContext.save()
+            try  coreDataStack.viewContext.save()
             completion()
         }
         catch {
             print("We are unable to save \(favoriteSubject.name ?? "the article")")
         }
+        return favoriteSubject
     }
     
     func removeFavoriteSubject(favoriteSubject: CD_FavoriteSubject, completion: () -> Void) {
-        CoreDataStack.sharedInstance.viewContext.delete(favoriteSubject)
+        coreDataStack.viewContext.delete(favoriteSubject)
         do {
-            try  CoreDataStack.sharedInstance.viewContext.save()
+            try  coreDataStack.viewContext.save()
             completion()
         }
         catch {

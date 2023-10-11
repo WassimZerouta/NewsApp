@@ -12,11 +12,11 @@ final class CD_ArticleRepository {
     
     // MARK: - Properties
 
-    private let coreDataStack: CoreDataStack
+    private let coreDataStack: CoreDataStackProtocol
 
     // MARK: - Init
 
-    init(coreDataStack: CoreDataStack = CoreDataStack.sharedInstance) {
+    init(coreDataStack: CoreDataStackProtocol) {
       self.coreDataStack = coreDataStack
     }
 
@@ -35,14 +35,14 @@ final class CD_ArticleRepository {
 
     func saveArticle(title: String, desc: String, url: String, urlToImage: String, isAdded: Bool, completion: () -> Void) -> CD_Article {
         
-        let article = CD_Article(context: CoreDataStack.sharedInstance.viewContext)
+        let article = CD_Article(context: coreDataStack.viewContext)
         article.title = title
         article.desc = desc
         article.url = url
         article.urlToImage = urlToImage
         article.isAdded = isAdded
         do {
-            try  CoreDataStack.sharedInstance.viewContext.save()
+            try  coreDataStack.viewContext.save()
             completion()
         }
         catch {
@@ -52,9 +52,9 @@ final class CD_ArticleRepository {
     }
     
     func removeArticles(article: CD_Article, completion: () -> Void) {
-        CoreDataStack.sharedInstance.viewContext.delete(article)
+        coreDataStack.viewContext.delete(article)
         do {
-            try  CoreDataStack.sharedInstance.viewContext.save()
+            try  coreDataStack.viewContext.save()
             completion()
         }
         catch {

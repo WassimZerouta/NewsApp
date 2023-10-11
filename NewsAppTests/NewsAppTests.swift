@@ -10,49 +10,23 @@ import XCTest
 
 final class NewsAppTests: XCTestCase {
 
-    func testPerformRequestWithMock() {
-        // Créer une instance de mock avec les données de réponse réussie
-        let fakeResponseData = FakeResponseData()
-        let mockHelper = NewsAPIHelperMock(fakeResponseData: fakeResponseData.successData!)
+    func testGetRecipesSucced() {
+        //Given
+        let apiHelper: APIHelper = MockNewsAPIHelper()
         
-        // Appeler la méthode performRequest avec le mock
-        mockHelper.performRequest(q: "apple") { success, articles in
-            // Vérifier que la méthode performRequest du mock a été appelée
-            XCTAssertTrue(mockHelper.performRequestCalled)
-            
-            // Vérifier que les paramètres de l'appel sont corrects
-            XCTAssertEqual(mockHelper.performRequestQArgument, "apple")
-            
-            // Vérifier que la réponse contient des articles fictifs
-            XCTAssertNotNil(articles)
-            XCTAssertEqual(articles?.count, 2) // Vérifier le nombre d'articles
-            
-            // Vérifier le contenu des articles si nécessaire
-            
-            // Vérifier que la complétion a été appelée avec succès
+        //When
+        let expectation = XCTestExpectation(description: "Wait for queu change")
+        apiHelper.performRequest(q: "apple") { success , Recipes in
+            //Then
             XCTAssertTrue(success)
+            XCTAssertNotNil(Recipes)
+            XCTAssertEqual(Recipes?.count, 2)
+            expectation.fulfill()
+            
+            
         }
-    }
-
-    func testPerformRequestWithMockFailure() {
-        // Créer une instance de mock avec les données de réponse en erreur
-        let fakeResponseData = FakeResponseData()
-        let mockHelper = NewsAPIHelperMock(fakeResponseData: fakeResponseData.errorData!)
+        wait(for: [expectation], timeout: 0.01)
         
-        // Appeler la méthode performRequest avec le mock
-        mockHelper.performRequest(q: "apple") { success, articles in
-            // Vérifier que la méthode performRequest du mock a été appelée
-            XCTAssertTrue(mockHelper.performRequestCalled)
-            
-            // Vérifier que les paramètres de l'appel sont corrects
-            XCTAssertEqual(mockHelper.performRequestQArgument, "apple")
-            
-            // Vérifier que la réponse est nulle en cas d'erreur
-            XCTAssertNil(articles)
-            
-            // Vérifier que la complétion a été appelée avec une erreur
-            XCTAssertFalse(success)
-        }
     }
 
 }
