@@ -11,7 +11,7 @@ import WebKit
 class WebNiewsViewController: UIViewController {
 
     
-    var article = CD_Article(context: CoreDataStack.sharedInstance.viewContext)
+    var article = CD_Article(context: CoreDataStack.shared.viewContext)
     var stringUrl = String()
     var desc = String()
     var urlToImage = String()
@@ -78,7 +78,7 @@ class WebNiewsViewController: UIViewController {
     }
     
     func refreshFavorite() {
-        CD_ArticleRepository().getArticles { CD_Articles in
+        CD_ArticleRepository(coreDataStack: CoreDataStack.shared).getArticles { CD_Articles in
             DispatchQueue.main.async { [self] in
                 self.cd_articles = CD_Articles
                 self.cd_articles!.removeAll { cd_article in
@@ -170,14 +170,14 @@ class WebNiewsViewController: UIViewController {
     
     func saveArticle(title: String, desc: String, url: String, urlToImage: String, isAdded: Bool) {
         // create entity instance with context
-        article = CD_ArticleRepository().saveArticle(title: title, desc: desc, url: url, urlToImage: urlToImage, isAdded: isAdded) {
+        article = CD_ArticleRepository(coreDataStack: CoreDataStack.shared).saveArticle(title: title, desc: desc, url: url, urlToImage: urlToImage, isAdded: isAdded) {
             bookmarkButton.tintColor = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
         }
     }
     
     
     func removeArticle(article: CD_Article) {
-        CD_ArticleRepository().removeArticles(article: article) {
+        CD_ArticleRepository(coreDataStack: CoreDataStack.shared).removeArticles(article: article) {
             bookmarkButton.tintColor = .gray
         }
     }

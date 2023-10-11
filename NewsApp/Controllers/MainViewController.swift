@@ -12,8 +12,11 @@ class MainViewController: UIViewController {
     
     var subject: String?
     var selectedIndex: IndexPath?
+    var articles: [Article]?
+    var favoriteSubject = [CD_FavoriteSubject]()
     
     let headerView = UIView()
+    
     var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -21,13 +24,13 @@ class MainViewController: UIViewController {
         collection.showsHorizontalScrollIndicator = false
         return collection
     }()
+    
     let tableView = UITableView()
     
     var tabArray = [UIButton]()
-        
-    var articles: [Article]?
-    var cd_favoriteSubject = [CD_FavoriteSubject]()
 
+    
+    // Put colors in assets
     let colorPrimaryDark = UIColor(red: 0.13, green: 0.37, blue: 0.38, alpha: 1.00)
     let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
     let colorGreen = UIColor(red: 0.02, green: 1.00, blue: 0.54, alpha: 1.00)
@@ -54,18 +57,18 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        CD_FavoriteSubjectRepository().getFavoriteSubject { favorite in
+        CD_FavoriteSubjectRepository(coreDataStack: CoreDataStack.shared).getFavoriteSubject { favorite in
             DispatchQueue.main.async {
-                self.cd_favoriteSubject = favorite
-                self.cd_favoriteSubject.removeAll { favorite in
+                self.favoriteSubject = favorite
+                self.favoriteSubject.removeAll { favorite in
                     favorite.name == nil
                 }
-                guard !self.cd_favoriteSubject.isEmpty else { return self.collectionView.isHidden = true }
+                guard !self.favoriteSubject.isEmpty else { return self.collectionView.isHidden = true }
                 self.collectionView.isHidden = false
                 
                 self.collectionView.reloadData()
             }
-            if cd_favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(cd_favoriteSubject[selectedIndex?.row ?? 0].name ?? "Apple")}
+            if favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(favoriteSubject[selectedIndex?.row ?? 0].name ?? "Apple")}
         }
           
     }
@@ -149,7 +152,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func refreshData() {
-        if cd_favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(cd_favoriteSubject[selectedIndex?.row ?? 0].name!)}
+        if favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(favoriteSubject[selectedIndex?.row ?? 0].name!)}
         refreshController.endRefreshing()
     }
 
@@ -202,11 +205,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        cd_favoriteSubject.count
+        favoriteSubject.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        fetchArticles(cd_favoriteSubject[indexPath.row].name!)
+        fetchArticles(favoriteSubject[indexPath.row].name!)
         tableView.reloadData()
         if let selected = selectedIndex {
             collectionView.deselectItem(at: selected, animated: false)
@@ -217,7 +220,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
-        cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
+        cell.titleLabel.text = favoriteSubject[indexPath.row].name
         if selectedIndex == nil && indexPath.row == 0 {
             cell.titleLabel.textColor = colorPrimaryDark
         } else {

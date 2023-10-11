@@ -10,7 +10,7 @@ import Lottie
 
 class SearchViewController: UIViewController {
     
-    var cd_favoriteSubject = [CD_FavoriteSubject]()
+    var favoriteSubjects = [CD_FavoriteSubject]()
     
     var searchArray = [String]()
     
@@ -42,6 +42,7 @@ class SearchViewController: UIViewController {
         return collection
     }()
     
+    //Put in assets
     let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
     
     override func viewDidLoad() {
@@ -65,13 +66,13 @@ class SearchViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.cd_favoriteSubject.isEmpty {
-            self.alert()
+        if self.favoriteSubjects.isEmpty {
+            self.addAlert()
         }
         
     }
     
-    func alert() {
+    func addAlert() {
         let alert = UIAlertController(title: "Add your favorites topics !", message: " You still don't have a favorite topic ! You can add more by pressing the plus button. \n You will find them on the home page.", preferredStyle: .alert)
 
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
@@ -127,19 +128,22 @@ class SearchViewController: UIViewController {
     
     @objc func addFavoriteSubjectButtonPressed() {
         let alertController = UIAlertController(title: "Add new favorite subject !", message: nil, preferredStyle: .alert)
+        
                 let confirmAction = UIAlertAction(title: "Add", style: .default) { (_) in
-                    if let txtField = alertController.textFields?.first, let text = txtField.text {
-                            // create entity instance with context
-                         CD_FavoriteSubjectRepository().saveFavoriteSubject(name: text, isAdded: true, completion: {
+                    if let textField = alertController.textFields?.first, let text = textField.text {
+                        
+                        _ = CD_FavoriteSubjectRepository(coreDataStack: CoreDataStack.shared).saveFavoriteSubject(name: text, isAdded: true, completion: {
                             print("\(text) is added")
                         })
                         self.refreshCollectionView()
                     }
                 }
+        
                 let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in }
                 alertController.addTextField { (textField) in
                     textField.placeholder = "Sport, Music.."
                 }
+        
                 alertController.addAction(confirmAction)
                 alertController.addAction(cancelAction)
                 self.present(alertController, animated: true, completion: nil)
@@ -147,13 +151,10 @@ class SearchViewController: UIViewController {
     }
     
     func refreshCollectionView() {
-        CD_FavoriteSubjectRepository().getFavoriteSubject { CD_FavoriteSubject in
+        CD_FavoriteSubjectRepository(coreDataStack: CoreDataStack.shared).getFavoriteSubject { CD_FavoriteSubject in
             DispatchQueue.main.async {
-                self.cd_favoriteSubject = CD_FavoriteSubject
-                self.cd_favoriteSubject.removeAll { cd_favoriteSubject in
-                    cd_favoriteSubject.name == nil
-                    
-                }
+                self.favoriteSubjects = CD_FavoriteSubject
+                self.favoriteSubjects = self.favoriteSubjects.compactMap { $0.name != nil ? $0 : nil }
                 self.collectionView.reloadData()
             }
         }
@@ -161,13 +162,10 @@ class SearchViewController: UIViewController {
 }
 
 func stringArray(array: [String]) -> String {
-    
-    var search = array.joined(separator: "%20+")
-    search.removeAll { Character in
-        Character == ","
-    }
-    let array = search.components(separatedBy: " ")
-    search = array.joined(separator: "%20+")
+    let search = array
+        .joined(separator: " ")
+        .replacingOccurrences(of: ",", with: "")
+        .replacingOccurrences(of: " ", with: "%20+")
     return search
 }
 
@@ -189,12 +187,12 @@ extension SearchViewController: UISearchBarDelegate {
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        cd_favoriteSubject.count
+        favoriteSubjects.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
-        cell.titleLabel.text = cd_favoriteSubject[indexPath.row].name
+        cell.titleLabel.text = favoriteSubjects[indexPath.row].name
         cell.barSeparator.backgroundColor = .white.withAlphaComponent(0.0)
         cell.contentView.layer.cornerRadius = 7
         cell.contentView.backgroundColor = colorPrimary
@@ -210,7 +208,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             alert.addAction(UIAlertAction(title: "Delete",
                                           style: UIAlertAction.Style.destructive,
                                           handler: {(_: UIAlertAction!) in
-                        CD_FavoriteSubjectRepository().removeFavoriteSubject(favoriteSubject: self.cd_favoriteSubject[indexPath.row]) {
+                CD_FavoriteSubjectRepository(coreDataStack: CoreDataStack.shared).removeFavoriteSubject(favoriteSubject: self.favoriteSubjects[indexPath.row]) {
                             print("delete")
                         
                         self.refreshCollectionView()

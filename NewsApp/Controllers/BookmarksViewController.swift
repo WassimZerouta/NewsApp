@@ -31,7 +31,7 @@ class BookmarksViewController: UIViewController {
         createTableView()
         setupTableView()
         view.backgroundColor = .systemGroupedBackground
-        CD_ArticleRepository().getArticles { CD_Articles in
+        CD_ArticleRepository(coreDataStack: CoreDataStack.shared ).getArticles { CD_Articles in
             DispatchQueue.main.async {
                 self.cd_articles = CD_Articles
                 self.cd_articles.removeAll { cd_article in
@@ -45,7 +45,7 @@ class BookmarksViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        CD_ArticleRepository().getArticles { CD_Articles in
+        CD_ArticleRepository(coreDataStack: CoreDataStack.shared).getArticles { CD_Articles in
             DispatchQueue.main.async {
                 self.cd_articles = CD_Articles
                 self.cd_articles.removeAll { cd_article in
