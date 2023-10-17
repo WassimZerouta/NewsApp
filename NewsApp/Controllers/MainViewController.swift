@@ -29,15 +29,6 @@ class MainViewController: UIViewController {
     
     var tabArray = [UIButton]()
 
-    
-    // Put colors in assets
-    let colorPrimaryDark = UIColor(red: 0.13, green: 0.37, blue: 0.38, alpha: 1.00)
-    let colorPrimary = UIColor(red: 0.41, green: 0.65, blue: 0.68, alpha: 1.00)
-    let colorGreen = UIColor(red: 0.02, green: 1.00, blue: 0.54, alpha: 1.00)
-    let colorRed = UIColor(red: 1.00, green: 0.03, blue: 0.17, alpha: 1.00)
-    let colorViolet = UIColor(red: 1.00, green: 0.03, blue: 0.17, alpha: 1.00)
-    let colorOrange = UIColor(red: 1.00, green: 0.27, blue: 0.00, alpha: 1.00)
-    
     let cellReuseIdentifier = "cell"
     
     let refreshController: UIRefreshControl = {
@@ -111,7 +102,7 @@ class MainViewController: UIViewController {
         title.translatesAutoresizingMaskIntoConstraints = false
         title.text = "NEWSAPP"
         title.font = UIFont(name:"Futura-Bold", size: 25.0)
-        title.textColor = colorPrimary
+        title.textColor = UIColor(named: "ColorPrimary")
         title.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
         title.centerYAnchor.constraint(equalTo: headerView.centerYAnchor).isActive = true
         
@@ -138,7 +129,7 @@ class MainViewController: UIViewController {
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.addSubview(refreshController)
-        refreshController.tintColor = colorPrimary
+        refreshController.tintColor = UIColor(named: "ColorPrimary")
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
     
@@ -237,9 +228,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = favoriteSubject[indexPath.row].name
         if selectedIndex == nil && indexPath.row == 0 {
-            cell.titleLabel.textColor = colorPrimaryDark
+            cell.titleLabel.textColor = UIColor(named: "ColorPrimaryDark")
         } else {
-            cell.titleLabel.textColor = indexPath != selectedIndex ? colorPrimary : colorPrimaryDark
+            cell.titleLabel.textColor = indexPath != selectedIndex ? UIColor(named: "ColorPrimaryDark")  : UIColor(named: "ColorPrimary")
         }
         return cell
     }
