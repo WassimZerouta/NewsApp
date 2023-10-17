@@ -37,8 +37,9 @@ class SearchResultViewController: UIViewController {
 
     }
     
+    
+    // Fetch articles
     func fetchArticles(_ q: String) {
-        
         NewsAPIHelper.shared.performRequest( q: q ) { _ , Articles in
             DispatchQueue.main.async {
                 self.articles = Articles!
@@ -47,10 +48,12 @@ class SearchResultViewController: UIViewController {
         }
     }
    
+    // Action when BackButton is pressed
     @objc func backButtonPressed() {
         dismiss(animated: true)
     }
     
+    // Create table view
     func createTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -60,6 +63,7 @@ class SearchResultViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    // Set up table view
     func setupTableView() {
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate = self
@@ -69,10 +73,13 @@ class SearchResultViewController: UIViewController {
 }
 
 extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // Number of rows in section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let article = articles { return article.count } else { return 0 }
     }
     
+    // Configuaration of the tableview cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
             if let urlToImage = articles![indexPath.row].urlToImage {
@@ -95,10 +102,12 @@ extension SearchResultViewController: UITableViewDelegate, UITableViewDataSource
         else { let defaultCell = UITableViewCell(); return defaultCell }
     }
     
+    // Define the height of the tableview cell
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.frame.height/3-20
     }
     
+    // Action when the tableview cell is selected
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let title = articles![indexPath.row].title else {return}
         guard let description = articles![indexPath.row].description else {return}

@@ -37,7 +37,7 @@ class BookmarksViewController: UIViewController {
                 self.cd_articles.removeAll { cd_article in
                     cd_article.title == nil
                 }
-                if self.cd_articles.isEmpty { self.alert()}
+                if self.cd_articles.isEmpty { self.addAlert()}
             }
         }
         
@@ -66,15 +66,16 @@ class BookmarksViewController: UIViewController {
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    func alert() {
-        let alert = UIAlertController(title: "Add your favorites news !", message: " You still don't have bookmarks ! You can add more by pressing the bookmarks button in the news", preferredStyle: .alert)
+    // Add addAlert when there are 0 favorite article
+    func addAlert() {
+        let addAlert = UIAlertController(title: "Add your favorites news !", message: " You still don't have bookmarks ! You can add more by pressing the bookmarks button in the news", preferredStyle: .alert)
 
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true, completion: nil)
+        addAlert.addAction(cancelAction)
+        self.present(addAlert, animated: true, completion: nil)
     }
 
-    
+    // Create title
     func createTitle() {
         self.view.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -84,6 +85,7 @@ class BookmarksViewController: UIViewController {
         titleLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
+    // Create table view
     func createTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,10 +97,13 @@ class BookmarksViewController: UIViewController {
 }
 
 extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // Number of rows in section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       return  cd_articles.count
     }
     
+    // Configuaration of the tableview cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
@@ -123,6 +128,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         else { let defaultCell = UITableViewCell(); return defaultCell }
     }
     
+    // Action when the tableview cell is selected
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let title = cd_articles[indexPath.row].title else {return}
         guard let description = cd_articles[indexPath.row].desc else {return}
@@ -134,6 +140,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         present(navVc, animated: true)
     }
     
+    // Define the height of the tableview cell
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.frame.height/3-20 
     }

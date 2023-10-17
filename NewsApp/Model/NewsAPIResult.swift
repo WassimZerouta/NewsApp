@@ -7,6 +7,8 @@
 
 import Foundation
 
+// Creation of Decodable struct for JSON deserialisation
+
 struct NewsAPIResult: Decodable {
     
     var articles: [Article]?

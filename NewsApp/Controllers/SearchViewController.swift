@@ -72,14 +72,16 @@ class SearchViewController: UIViewController {
         
     }
     
+    // Add alert when there are 0 favorite subject
     func addAlert() {
-        let alert = UIAlertController(title: "Add your favorites topics !", message: " You still don't have a favorite topic ! You can add more by pressing the plus button. \n You will find them on the home page.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add a favorite subject !", message: " You still don't have a favorite topic ! You can add more by pressing the plus button. \n You will find them on the home page.", preferredStyle: .alert)
 
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
     
+    // Create search bar
     func createSearchBar() {
         self.view.addSubview(searchBar)
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -90,6 +92,7 @@ class SearchViewController: UIViewController {
         
     }
     
+    // Create favorite subject label
     func createFavoriteSubjectLabel() {
         self.view.addSubview(favoriteSubjectLabel)
         favoriteSubjectLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -100,6 +103,7 @@ class SearchViewController: UIViewController {
         
     }
     
+    // Create addFavoriteSubject button
     func createAddFavoriteSubjectButton() {
         self.view.addSubview(addFavoriteSubjectButton)
         addFavoriteSubjectButton.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +113,8 @@ class SearchViewController: UIViewController {
         addFavoriteSubjectButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         addFavoriteSubjectButton.addTarget(self, action: #selector(addFavoriteSubjectButtonPressed), for: .touchUpInside)
     }
-        
+    
+    // create favorite section
     private func createFavoritesSection() {
         self.view.addSubview(collectionView)
         collectionView.isUserInteractionEnabled = true
@@ -120,12 +125,14 @@ class SearchViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
     }
     
+    // Set up collection view
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCollectionViewCell")
     }
     
+    // Add action when addFavoriteSubject button is pressed
     @objc func addFavoriteSubjectButtonPressed() {
         let alertController = UIAlertController(title: "Add new favorite subject !", message: nil, preferredStyle: .alert)
         
@@ -150,6 +157,7 @@ class SearchViewController: UIViewController {
         
     }
     
+    // refresh the collectionView
     func refreshCollectionView() {
         CD_FavoriteSubjectRepository(coreDataStack: CoreDataStack.shared).getFavoriteSubject { CD_FavoriteSubject in
             DispatchQueue.main.async {
@@ -161,6 +169,7 @@ class SearchViewController: UIViewController {
     }
 }
 
+// Convert array on adapted string to pass in the SearchResultViewController
 func stringArray(array: [String]) -> String {
     let search = array
         .joined(separator: " ")
@@ -170,10 +179,13 @@ func stringArray(array: [String]) -> String {
 }
 
 
+// SearchViewController extensions
+
 extension SearchViewController: UISearchBarDelegate {
+    
+    // Action when search button is pressed
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchArray.append(searchBar.text!)
-        print(searchArray)
         view.endEditing(true)
         let searchText = stringArray(array: searchArray)
         let vc = SearchResultViewController(subject: searchText)
@@ -186,10 +198,13 @@ extension SearchViewController: UISearchBarDelegate {
 }
 
 extension SearchViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    // Number of items in section
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         favoriteSubjects.count
     }
     
+    // Configuaration of the collectionview item
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = favoriteSubjects[indexPath.row].name
@@ -199,6 +214,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
         return cell
     }
     
+    // Action when the collectionview item is selected
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let alert = UIAlertController(title: "Remove from favorite", message: "You can always access your content by signing back in", preferredStyle: UIAlertController.Style.alert)
 
@@ -217,7 +233,7 @@ extension SearchViewController: UICollectionViewDataSource, UICollectionViewDele
             self.present(alert, animated: true, completion: nil)
     }
     
-    
+    // Define the size of the collectionview item
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width/3.5 - 5, height: 50)
     }

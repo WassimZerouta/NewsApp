@@ -77,6 +77,8 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    
+    // Refresh favorite article
     func refreshFavorite() {
         CD_ArticleRepository(coreDataStack: CoreDataStack.shared).getArticles { CD_Articles in
             DispatchQueue.main.async { [self] in
@@ -90,6 +92,7 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    // Verify if the article is in the favorite articles list
     func checkIsAdded(CD_Articles: [CD_Article], articleTitle: String) -> UIColor {
         var color = UIColor.red
         let titleArray = CD_Articles.map( { $0.title! })
@@ -106,6 +109,7 @@ class WebNiewsViewController: UIViewController {
         return color
     }
     
+    // Create web view
     func createWebView() {
         self.view.addSubview(webView)
         webView.translatesAutoresizingMaskIntoConstraints = false
@@ -115,6 +119,7 @@ class WebNiewsViewController: UIViewController {
         webView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -70).isActive = true
     }
     
+    // Create bookmarkButton
     func createbookmarkButton() {
         self.view.addSubview(bookmarkButton)
         bookmarkButton.translatesAutoresizingMaskIntoConstraints = false
@@ -126,6 +131,7 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    // Create drawableButton
     func createDrawableButton() {
         self.view.addSubview(drawableButton)
         drawableButton.translatesAutoresizingMaskIntoConstraints = false
@@ -137,13 +143,15 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    // Create navItemsButtons
     func createNavItemButtons() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(backButton))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(backButtonPressed))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .done, target: self, action: #selector(shareButton))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .done, target: self, action: #selector(shareButtonPressed))
         
     }
     
+    // Action when bookmarksButton is pressed
     @objc func bookmarkHandler() {
         
         for article in cd_articles! {
@@ -161,6 +169,7 @@ class WebNiewsViewController: UIViewController {
         
     }
     
+    // Action when drawableButton is pressed
     @objc func drowableHandler() {
         let image = self.webView.takeScreenShot()
         let vc = DrowableViewController(backgroundImage: image)
@@ -168,6 +177,7 @@ class WebNiewsViewController: UIViewController {
         present(navVc, animated: false)
     }
     
+    // Add article to favorites article list
     func saveArticle(title: String, desc: String, url: String, urlToImage: String, isAdded: Bool) {
         // create entity instance with context
         article = CD_ArticleRepository(coreDataStack: CoreDataStack.shared).saveArticle(title: title, desc: desc, url: url, urlToImage: urlToImage, isAdded: isAdded) {
@@ -175,30 +185,32 @@ class WebNiewsViewController: UIViewController {
         }
     }
     
-    
+    // Remove article from favorite article list
     func removeArticle(article: CD_Article) {
         CD_ArticleRepository(coreDataStack: CoreDataStack.shared).removeArticles(article: article) {
             bookmarkButton.tintColor = .gray
         }
     }
     
-    @objc func backButton() {
+    // Action when backButton is pressed
+    @objc func backButtonPressed() {
         dismiss(animated: true)
     }
     
-    @objc func shareButton() {
+    // Action when share button is pressed
+    @objc func shareButtonPressed() {
         let activityController = UIActivityViewController(activityItems: [URL(string: stringUrl)!] , applicationActivities: nil)
         present(activityController, animated: true)
 
     }
     
+    // Load the the content of the url in the web view
     func loadNewsUrl(_ stringUrl: String) {
         let newsUrl = URL(string: stringUrl)
 
         if let url = newsUrl {
             
             let backgroundQueue = DispatchQueue.global(qos: .background)
-            
             backgroundQueue.async {
                 let request = URLRequest(url: url)
                 DispatchQueue.main.async {
@@ -214,6 +226,7 @@ class WebNiewsViewController: UIViewController {
 
 extension WebNiewsViewController: WKNavigationDelegate {
     
+    // Authorize when url contains ".com"
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let host = navigationAction.request.url?.host {
             if host.contains(".com") {

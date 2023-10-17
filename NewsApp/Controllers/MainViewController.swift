@@ -73,6 +73,7 @@ class MainViewController: UIViewController {
           
     }
     
+    // Make favorites subjects scrollable
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
          if scrollView.contentOffset.y > 0 {
              UIView.animate(withDuration: 0.3) {
@@ -85,6 +86,7 @@ class MainViewController: UIViewController {
          }
      }
     
+    // Fetch articles
     func fetchArticles(_ q: String) {
         
         NewsAPIHelper.shared.performRequest( q: q ) { _ , Articles in
@@ -95,8 +97,7 @@ class MainViewController: UIViewController {
         }
     }
     
-    // Definition of the UI
-    
+    // Create header view
     private func createHeaderView() {
         let title = UILabel()
         self.view.addSubview(headerView)
@@ -116,6 +117,7 @@ class MainViewController: UIViewController {
         
     }
     
+    // Create Favorite section
     private func createFavoritesSection() {
         tableView.addSubview(collectionView)
         collectionView.isUserInteractionEnabled = true
@@ -127,6 +129,7 @@ class MainViewController: UIViewController {
         collectionView.backgroundColor = .systemGroupedBackground.withAlphaComponent(0.9)
     }
     
+    // Create table view
     func createTableView() {
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -139,18 +142,21 @@ class MainViewController: UIViewController {
         refreshController.addTarget(self, action: #selector(refreshData), for: .valueChanged)
     }
     
+    // set up the table view
     func setupTableView() {
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
     }
     
+    // set up collection view
     func setupCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: "CustomCollectionViewCell")
     }
     
+    // refresh data for the pull to refresh
     @objc func refreshData() {
         if favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(favoriteSubject[selectedIndex?.row ?? 0].name!)}
         refreshController.endRefreshing()
@@ -159,10 +165,13 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // Number of rows in section
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let article = articles { return article.count } else { return 0 }
     }
     
+    // Configuaration of the tableview cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
             if let urlToImage = articles![indexPath.row].urlToImage {
@@ -185,10 +194,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         else { let defaultCell = UITableViewCell(); return defaultCell }
     }
     
+    // Define the height of the tableview cell
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.frame.height/3-20 
     }
     
+    // Action when the tableview cell is selected
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let title = articles![indexPath.row].title else {return}
         guard let description = articles![indexPath.row].description else {return}
@@ -204,10 +215,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    
+    // Number of items in section
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         favoriteSubject.count
     }
     
+    // Action when the collectionview item is selected
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         fetchArticles(favoriteSubject[indexPath.row].name!)
         tableView.reloadData()
@@ -218,6 +232,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         collectionView.reloadData()
     }
     
+    // Configuaration of the collectionview item
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CustomCollectionViewCell", for: indexPath) as! CustomCollectionViewCell
         cell.titleLabel.text = favoriteSubject[indexPath.row].name
@@ -229,10 +244,12 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
         return cell
     }
     
+    // Define the size of the collectionview item
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width/4 - 3, height: 40)
     }
     
+    // Define the edges of the collectionview item
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 20)
     }

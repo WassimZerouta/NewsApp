@@ -14,7 +14,7 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
     
     let topView: UIView = {
         let view = UIView()
-        view.backgroundColor = .groupTableViewBackground
+        view.backgroundColor = .gray
         return view
     }()
     
@@ -34,7 +34,6 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
         return canvas
     }()
 
-    // Define toolPicker here instead of inside `viewDidAppear` function
     private let toolPicker = PKToolPicker()
 
     let drawing = PKDrawing()
@@ -47,7 +46,7 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
 
     }
     
-
+    // Create canvas view
     func createCanvasView() {
         canvasView.backgroundColor = UIColor(patternImage: backgroundImage)
         canvasView.drawing = drawing
@@ -60,6 +59,7 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
         canvasView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
     
+    // Create top view
     func createTopView() {
         view.addSubview(topView)
         topView.translatesAutoresizingMaskIntoConstraints = false
@@ -70,16 +70,19 @@ class DrowableViewController: UIViewController, PKCanvasViewDelegate {
         topView.isUserInteractionEnabled = true
     }
     
+    // Create navItemsButtons
     func createNavItemButtons() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .done, target: self, action: #selector(dismissButtonPressed))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .done, target: self, action: #selector(shareButton))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .done, target: self, action: #selector(shareButtonPressed))
     }
     
+    // Action when dismissButton is pressed
     @objc func dismissButtonPressed() {
         self.dismiss(animated: true)
     }
     
-    @objc func shareButton() {
+    // Action when shareButton is pressed
+    @objc func shareButtonPressed() {
         let image = self.canvasView.takeScreenShot()
         let activityController = UIActivityViewController(activityItems: [image] , applicationActivities: nil)
         present(activityController, animated: true)

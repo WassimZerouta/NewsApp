@@ -41,7 +41,8 @@ class NewsTableViewCell: UITableViewCell {
         let view = UIView()
         return view
     }()
-
+    
+    // Configuration of the cell
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -75,6 +76,8 @@ class NewsTableViewCell: UITableViewCell {
         image.image = nil
     }
     
+    
+    // Configuration of the gradient
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -93,6 +96,7 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
+    // Change the gradient when orientation change
     override func willTransition(to state: UITableViewCell.StateMask) {
         super.willTransition(to: state)
 
