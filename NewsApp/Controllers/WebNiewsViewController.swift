@@ -8,6 +8,10 @@
 import UIKit
 import WebKit
 
+protocol refreshBookmarksDelegate {
+    func didRefresh()
+}
+
 class WebNiewsViewController: UIViewController {
 
     
@@ -18,6 +22,9 @@ class WebNiewsViewController: UIViewController {
     var titles = String()
     
     var cd_articles: [CD_Article]?
+    
+    var delegate: refreshBookmarksDelegate?
+
     
     init(url: String, titles: String, desc: String, urlToImage: String) {
         self.stringUrl = url
@@ -194,6 +201,7 @@ class WebNiewsViewController: UIViewController {
     
     // Action when backButton is pressed
     @objc func backButtonPressed() {
+        delegate?.didRefresh()
         dismiss(animated: true)
     }
     

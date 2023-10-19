@@ -135,6 +135,7 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         guard let url = cd_articles[indexPath.row].url else {return}
         guard let urlToImage = cd_articles[indexPath.row].urlToImage else {return}
         let vc = WebNiewsViewController(url: url, titles: title, desc: description, urlToImage: urlToImage)
+        vc.delegate = self
         vc.modalPresentationStyle = .fullScreen
         let navVc = UINavigationController(rootViewController: vc)
         present(navVc, animated: true)
@@ -145,4 +146,18 @@ extension BookmarksViewController: UITableViewDelegate, UITableViewDataSource {
         return view.frame.height/3-20 
     }
     
+}
+
+extension BookmarksViewController: refreshBookmarksDelegate {
+    func didRefresh() {
+        CD_ArticleRepository(coreDataStack: CoreDataStack.shared).getArticles { CD_Articles in
+            DispatchQueue.main.async {
+                self.cd_articles = CD_Articles
+                self.cd_articles.removeAll { cd_article in
+                    cd_article.title == nil
+                }
+                self.tableView.reloadData()
+            }
+        }
+    }
 }
