@@ -28,14 +28,14 @@ class MainViewController: UIViewController {
     let tableView = UITableView()
     
     var tabArray = [UIButton]()
-
+    
     let cellReuseIdentifier = "cell"
     
     let refreshController: UIRefreshControl = {
         let refreshController = UIRefreshControl()
         return refreshController
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemGroupedBackground
@@ -58,31 +58,30 @@ class MainViewController: UIViewController {
                 self.collectionView.isHidden = false
                 
                 self.collectionView.reloadData()
+                if self.favoriteSubject.isEmpty {self.fetchArticles("Apple") } else { self.fetchArticles(self.favoriteSubject[self.selectedIndex?.row ?? 0].name!)}
             }
-            if favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(favoriteSubject[selectedIndex?.row ?? 0].name ?? "Apple")}
         }
-          
     }
     
     // Make favorites subjects scrollable
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-         if scrollView.contentOffset.y > 0 {
-             UIView.animate(withDuration: 0.3) {
-                 self.collectionView.alpha = 0
-             }
-         } else {
-             UIView.animate(withDuration: 0.3) {
-                 self.collectionView.alpha = 1
-             }
-         }
-     }
+        if scrollView.contentOffset.y > 0 {
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.alpha = 0
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.collectionView.alpha = 1
+            }
+        }
+    }
     
     // Fetch articles
     func fetchArticles(_ q: String) {
         
         NewsAPIHelper.shared.performRequest( q: q ) { _ , Articles in
             DispatchQueue.main.async {
-                self.articles = Articles!
+                if let articles = Articles {self.articles = articles}
                 self.tableView.reloadData()
             }
         }
@@ -152,7 +151,7 @@ class MainViewController: UIViewController {
         if favoriteSubject.isEmpty {fetchArticles("Apple") } else { fetchArticles(favoriteSubject[selectedIndex?.row ?? 0].name!)}
         refreshController.endRefreshing()
     }
-
+    
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
@@ -166,7 +165,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewsTableViewCell {
             if let urlToImage = articles![indexPath.row].urlToImage {
-            AF.request(  urlToImage ,method: .get).response{ response in
+                AF.request(  urlToImage ,method: .get).response{ response in
                     switch response.result {
                     case .success(let responseData):
                         DispatchQueue.main.async {
@@ -175,8 +174,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
                     case .failure(let error):
                         print(error)
                     }
+                }
             }
-        }
             if let title = articles![indexPath.row].title { cell.title.text = title }
             if let description = articles![indexPath.row].description { cell.contentDescription.text = description}
             
@@ -187,7 +186,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     // Define the height of the tableview cell
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return view.frame.height/3-20 
+        return view.frame.height/3-20
     }
     
     // Action when the tableview cell is selected
