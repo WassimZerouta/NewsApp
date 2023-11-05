@@ -26,9 +26,7 @@ class MainViewController: UIViewController {
     }()
     
     let tableView = UITableView()
-    
-    var tabArray = [UIButton]()
-    
+        
     let cellReuseIdentifier = "cell"
     
     let refreshController: UIRefreshControl = {
@@ -58,8 +56,9 @@ class MainViewController: UIViewController {
                 self.collectionView.isHidden = false
                 
                 self.collectionView.reloadData()
-                if self.favoriteSubject.isEmpty {self.fetchArticles("Apple") } else { self.fetchArticles(self.favoriteSubject[self.selectedIndex?.row ?? 0].name!)}
-            }
+
+        }
+            if self.favoriteSubject.isEmpty {self.fetchArticles("Apple") } else { self.fetchArticles(self.favoriteSubject[self.selectedIndex?.row ?? 0].name ?? "Apple")}
         }
     }
     
@@ -81,8 +80,11 @@ class MainViewController: UIViewController {
         
         NewsAPIHelper.shared.performRequest( q: q ) { _ , Articles in
             DispatchQueue.main.async {
-                if let articles = Articles {self.articles = articles}
+                if let articles = Articles {
+                    self.articles = articles
+                }
                 self.tableView.reloadData()
+
             }
         }
     }

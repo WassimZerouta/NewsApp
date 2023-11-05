@@ -53,6 +53,7 @@ class SearchViewController: UIViewController {
         createFavoriteSubjectLabel()
         createAddFavoriteSubjectButton()
         createFavoritesSection()
+
         let closeKeyboard = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
         closeKeyboard.cancelsTouchesInView = false
         view.addGestureRecognizer(closeKeyboard)
@@ -62,14 +63,6 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refreshCollectionView()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if self.favoriteSubjects.isEmpty {
-            self.addAlert()
-        }
-        
     }
     
     // Add alert when there are 0 favorite subject
@@ -164,6 +157,9 @@ class SearchViewController: UIViewController {
                 self.favoriteSubjects = CD_FavoriteSubject
                 self.favoriteSubjects = self.favoriteSubjects.compactMap { $0.name != nil ? $0 : nil }
                 self.collectionView.reloadData()
+                if self.favoriteSubjects.isEmpty {
+                    self.addAlert()
+                }
             }
         }
     }

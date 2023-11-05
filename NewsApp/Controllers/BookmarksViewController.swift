@@ -56,10 +56,7 @@ class BookmarksViewController: UIViewController {
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
+
     func setupTableView() {
         tableView.delegate = self
         tableView.dataSource = self

@@ -10,14 +10,14 @@ import CoreData
 @testable import NewsApp
 
 final class CD_ArticleTests: XCTestCase {
-
+    
     let coreDataStack = TestCoreDataStack.shared
     let repository = CD_ArticleRepository(coreDataStack: TestCoreDataStack.shared)
     
     override func tearDown() {
-
+        
         let context = coreDataStack.viewContext
-
+        
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = CD_Article.fetchRequest()
         
         let removeAll = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -44,7 +44,7 @@ final class CD_ArticleTests: XCTestCase {
             XCTAssertEqual(articles.count, 1)
         }
         
-
+        
     }
     
     func testRemoveArticles() {
@@ -55,8 +55,8 @@ final class CD_ArticleTests: XCTestCase {
         _ = repository.saveArticle(title: "Second article", desc: "", url: "", urlToImage: "", isAdded: true) {
             print("saved")
         }
-
-
+        
+        
         repository.removeArticles(article: firstArticle) {
             print("article removed")
         }
